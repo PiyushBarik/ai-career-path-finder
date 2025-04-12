@@ -16,7 +16,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Briefcase, FileText, Upload, XCircle } from "lucide-react";
+import {
+  Briefcase,
+  FileText,
+  Upload,
+  XCircle,
+  AlertCircle,
+} from "lucide-react";
 import { Layout } from "@/components/layout";
 import { SkillGapCard } from "@/components/skill-gap-card";
 import { motion, AnimatePresence } from "framer-motion";
@@ -28,10 +34,23 @@ export default function Dashboard() {
   const [skills, setSkills] = useState<string[]>([]);
   const [recommendations, setRecommendations] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState("profile");
+  const [error, setError] = useState<string | null>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setError(null);
     if (e.target.files && e.target.files[0]) {
-      setFile(e.target.files[0]);
+      const selectedFile = e.target.files[0];
+
+      // Check file size - 5MB limit
+      const MAX_FILE_SIZE = 5 * 1024 * 1024;
+      if (selectedFile.size > MAX_FILE_SIZE) {
+        setError(
+          "File size exceeds the 5MB limit. Please upload a smaller file or enter skills manually."
+        );
+        return;
+      }
+
+      setFile(selectedFile);
     }
   };
 
@@ -39,6 +58,8 @@ export default function Dashboard() {
     if (!file) return;
 
     setIsUploading(true);
+    setError(null);
+
     try {
       const formData = new FormData();
       formData.append("cv", file);
@@ -49,22 +70,30 @@ export default function Dashboard() {
         body: formData,
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to parse CV");
-      }
-
       const data = await response.json();
-      const extractedSkills = data.skills || [];
 
-      // Update skills with the extracted skills
-      setSkills((prevSkills) => [
-        ...new Set([...prevSkills, ...extractedSkills]),
-      ]);
-
-      // After skills are updated, get recommendations
-      await getRecommendations([...skills, ...extractedSkills]);
+      if (data.error) {
+        setError(data.error);
+        // If there are default skills provided despite the error, use them
+        if (data.skills && data.skills.length > 0) {
+          setSkills((prevSkills) => [
+            ...new Set([...prevSkills, ...data.skills]),
+          ]);
+        }
+      } else {
+        const extractedSkills = data.skills || [];
+        // Update skills with the extracted skills
+        setSkills((prevSkills) => [
+          ...new Set([...prevSkills, ...extractedSkills]),
+        ]);
+        // After skills are updated, get recommendations
+        await getRecommendations([...skills, ...extractedSkills]);
+      }
     } catch (error) {
       console.error("Error uploading CV:", error);
+      setError(
+        "Failed to process your CV. Please try again or enter skills manually."
+      );
     } finally {
       setIsUploading(false);
     }
@@ -104,6 +133,7 @@ export default function Dashboard() {
       setActiveTab("recommendations");
     } catch (error) {
       console.error("Error getting recommendations:", error);
+      setError("Failed to get recommendations. Please try again.");
     }
   };
 
@@ -164,12 +194,27 @@ export default function Dashboard() {
                       </CardHeader>
                       <CardContent className="pt-6">
                         <div className="grid w-full max-w-sm items-center gap-1.5">
-                          <Label htmlFor="cv">CV File</Label>
+                          <Label htmlFor="cv">
+                            CV File (PDF or Word, max 5MB)
+                          </Label>
                           <Input
                             id="cv"
                             type="file"
                             onChange={handleFileChange}
+                            accept=".pdf,.doc,.docx,.txt"
                           />
+
+                          {error && (
+                            <div className="flex items-center gap-2 text-red-500 mt-2 text-sm">
+                              <AlertCircle className="h-4 w-4" />
+                              <span>{error}</span>
+                            </div>
+                          )}
+
+                          <p className="text-xs text-gray-500 mt-1">
+                            For best results, use a simple formatted CV with
+                            clear sections.
+                          </p>
                         </div>
                       </CardContent>
                       <CardFooter>
