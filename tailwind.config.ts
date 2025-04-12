@@ -1,12 +1,12 @@
 import type { Config } from "tailwindcss";
-import tailwindcssAnimate from "tailwindcss-animate";
 
 const config: Config = {
-  darkMode: "class", // Changed from ["class"] to "class"
+  darkMode: "class",
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     container: {
@@ -51,6 +51,21 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        // Custom vibrant colors
+        vibrant: {
+          blue: "#4361EE",
+          purple: "#7209B7",
+          pink: "#F72585",
+          orange: "#FB5607",
+          yellow: "#FFBE0B",
+          teal: "#06D6A0",
+        },
+        // Gradient colors
+        gradient: {
+          start: "#4361EE",
+          mid: "#7209B7",
+          end: "#F72585",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -66,14 +81,28 @@ const config: Config = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        float: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-10px)" },
+        },
+        "pulse-soft": {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0.8" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        float: "float 6s ease-in-out infinite",
+        "pulse-soft": "pulse-soft 3s ease-in-out infinite",
+      },
+      backgroundImage: {
+        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
+        "hero-pattern": "url('/hero-pattern.svg')",
       },
     },
   },
-  plugins: [tailwindcssAnimate], // Changed from require() to imported variable
+  plugins: [require("tailwindcss-animate")],
 };
 
 export default config;
