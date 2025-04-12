@@ -13,8 +13,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check file size before processing
-    const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+    // Check file size before processing (limit to 5MB)
+    const MAX_FILE_SIZE = 5 * 1024 * 1024;
     if (cvFile.size > MAX_FILE_SIZE) {
       return NextResponse.json(
         {
@@ -31,15 +31,15 @@ export async function POST(request: NextRequest) {
     } catch (error: any) {
       console.error("Error parsing CV:", error);
 
-      // Check if it's a rate limit error
+      // If a rate limit error occurs, provide default skills for demo purposes
       if (error.code === "rate_limit_exceeded") {
         return NextResponse.json(
           {
             error:
               "The CV is too large to process. Please try a smaller file or try again later.",
-            skills: ["JavaScript", "React", "TypeScript", "HTML", "CSS"], // Provide some default skills for demo purposes
+            skills: ["JavaScript", "React", "TypeScript", "HTML", "CSS"],
           },
-          { status: 200 } // Return 200 with default skills to allow the demo to continue
+          { status: 200 }
         );
       }
 
