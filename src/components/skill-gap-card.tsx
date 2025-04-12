@@ -43,16 +43,14 @@ export function SkillGapCard({ recommendation }: SkillGapCardProps) {
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
     >
-      <Card className="overflow-hidden border-2 transition-all duration-300 h-full">
+      <Card className="overflow-hidden border-2 transition-all duration-300 h-full bg-card">
         <div
-          className={`absolute inset-0 bg-gradient-to-br from-vibrant-blue/10 to-vibrant-purple/10 transition-opacity duration-300 ${
+          className={`absolute inset-0 bg-gradient-to-br from-vibrant-blue/5 to-vibrant-purple/5 dark:from-vibrant-blue/10 dark:to-vibrant-purple/10 transition-opacity duration-300 ${
             isHovered ? "opacity-100" : "opacity-0"
           }`}
         />
         <CardHeader className="relative">
-          <CardTitle className="text-vibrant-purple">
-            {recommendation.role}
-          </CardTitle>
+          <CardTitle className="gradient-text">{recommendation.role}</CardTitle>
           <CardDescription>
             Match: {recommendation.matchPercentage}%
           </CardDescription>
@@ -72,10 +70,10 @@ export function SkillGapCard({ recommendation }: SkillGapCardProps) {
             >
               <Progress
                 value={recommendation.matchPercentage}
-                className="h-2 bg-gray-200"
+                className="h-2 bg-gray-200 dark:bg-gray-700"
               >
                 <div
-                  className="h-full bg-gradient-to-r from-vibrant-blue to-vibrant-purple rounded-full"
+                  className="h-full bg-gradient-to-r from-vibrant-blue to-vibrant-purple dark:from-[#60a5fa] dark:to-[#a855f7] rounded-full"
                   style={{ width: `${recommendation.matchPercentage}%` }}
                 />
               </Progress>
@@ -84,7 +82,7 @@ export function SkillGapCard({ recommendation }: SkillGapCardProps) {
 
           <div className="space-y-2">
             <h3 className="flex items-center gap-2 font-medium">
-              <CheckCircle className="h-4 w-4 text-vibrant-teal" />
+              <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" />
               Skills You Have
             </h3>
             <div className="flex flex-wrap gap-2">
@@ -95,10 +93,7 @@ export function SkillGapCard({ recommendation }: SkillGapCardProps) {
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.3, delay: 0.1 * index }}
                 >
-                  <Badge
-                    variant="outline"
-                    className="bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400"
-                  >
+                  <Badge variant="outline" className="badge-skill">
                     {skill}
                   </Badge>
                 </motion.div>
@@ -108,7 +103,7 @@ export function SkillGapCard({ recommendation }: SkillGapCardProps) {
 
           <div className="space-y-2">
             <h3 className="flex items-center gap-2 font-medium">
-              <XCircle className="h-4 w-4 text-vibrant-pink" />
+              <XCircle className="h-4 w-4 text-red-600 dark:text-red-400" />
               Skills You Need
             </h3>
             <div className="flex flex-wrap gap-2">
@@ -119,10 +114,7 @@ export function SkillGapCard({ recommendation }: SkillGapCardProps) {
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.3, delay: 0.1 * index }}
                 >
-                  <Badge
-                    variant="outline"
-                    className="bg-red-50 text-red-700 dark:bg-red-900/20 dark:text-red-400"
-                  >
+                  <Badge variant="outline" className="badge-skill-missing">
                     {skill}
                   </Badge>
                 </motion.div>
@@ -133,7 +125,7 @@ export function SkillGapCard({ recommendation }: SkillGapCardProps) {
           {recommendation.recommendedCourses.length > 0 && (
             <div className="space-y-2">
               <h3 className="flex items-center gap-2 font-medium">
-                <BookOpen className="h-4 w-4 text-vibrant-blue" />
+                <BookOpen className="h-4 w-4 text-vibrant-blue dark:text-[#60a5fa]" />
                 Recommended Courses
               </h3>
               <ul className="space-y-1">
@@ -145,8 +137,10 @@ export function SkillGapCard({ recommendation }: SkillGapCardProps) {
                     transition={{ duration: 0.3, delay: 0.2 + 0.1 * index }}
                     className="text-sm"
                   >
-                    <span className="font-medium">{course.code}</span>:{" "}
-                    {course.name}
+                    <span className="font-medium text-vibrant-blue dark:text-[#60a5fa]">
+                      {course.code}
+                    </span>
+                    : {course.name}
                   </motion.li>
                 ))}
               </ul>
@@ -156,7 +150,7 @@ export function SkillGapCard({ recommendation }: SkillGapCardProps) {
         <CardFooter className="relative">
           <Button
             variant="outline"
-            className="w-full bg-gradient-to-r from-vibrant-blue to-vibrant-purple text-white hover:opacity-90 border-0"
+            className="w-full gradient-blue-purple hover:opacity-90 border-0"
           >
             View Career Details
           </Button>

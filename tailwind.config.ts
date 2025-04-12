@@ -51,21 +51,21 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // Custom vibrant colors
-        vibrant: {
-          blue: "#4361EE",
-          purple: "#7209B7",
-          pink: "#F72585",
-          orange: "#FB5607",
-          yellow: "#FFBE0B",
-          teal: "#06D6A0",
-        },
-        // Gradient colors
-        gradient: {
-          start: "#4361EE",
-          mid: "#7209B7",
-          end: "#F72585",
-        },
+        // Accessible vibrant colors
+        "vibrant-blue": "#2563eb", // More accessible blue
+        "vibrant-purple": "#7e22ce", // More accessible purple
+        "vibrant-pink": "#db2777", // More accessible pink
+        "vibrant-orange": "#ea580c", // More accessible orange
+        "vibrant-yellow": "#ca8a04", // More accessible yellow
+        "vibrant-teal": "#0d9488", // More accessible teal
+        // Light mode specific
+        "vibrant-light-blue": "#3b82f6",
+        "vibrant-light-purple": "#9333ea",
+        "vibrant-light-pink": "#ec4899",
+        // Dark mode specific
+        "vibrant-dark-blue": "#60a5fa",
+        "vibrant-dark-purple": "#a855f7",
+        "vibrant-dark-pink": "#f472b6",
       },
       borderRadius: {
         lg: "var(--radius)",

@@ -145,13 +145,13 @@ export default function Dashboard() {
             animation="slide-up"
             className="flex items-center justify-between"
           >
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-vibrant-blue to-vibrant-purple bg-clip-text text-transparent">
+            <h1 className="text-3xl font-bold gradient-text">
               Student Dashboard
             </h1>
             <Button
               onClick={() => getRecommendations()}
               disabled={skills.length === 0}
-              className="bg-gradient-to-r from-vibrant-blue to-vibrant-purple hover:opacity-90"
+              className="gradient-blue-purple hover:opacity-90"
             >
               <Briefcase className="mr-2 h-4 w-4" />
               Get Career Recommendations
@@ -164,16 +164,16 @@ export default function Dashboard() {
             className="w-full"
           >
             <AnimatedElement animation="slide-up" delay={0.1}>
-              <TabsList className="grid w-full grid-cols-2 bg-gray-100 dark:bg-gray-800">
+              <TabsList className="grid w-full grid-cols-2 bg-muted">
                 <TabsTrigger
                   value="profile"
-                  className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-vibrant-blue data-[state=active]:to-vibrant-purple data-[state=active]:text-white"
+                  className="data-[state=active]:gradient-blue-purple"
                 >
                   Your Profile
                 </TabsTrigger>
                 <TabsTrigger
                   value="recommendations"
-                  className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-vibrant-blue data-[state=active]:to-vibrant-purple data-[state=active]:text-white"
+                  className="data-[state=active]:gradient-blue-purple"
                 >
                   Recommendations
                 </TabsTrigger>
@@ -184,10 +184,10 @@ export default function Dashboard() {
               {activeTab === "profile" && (
                 <TabsContent value="profile" className="space-y-6">
                   <AnimatedElement animation="slide-up" delay={0.2}>
-                    <Card className="overflow-hidden border-2 hover:border-vibrant-blue transition-colors duration-300">
-                      <CardHeader className="bg-gradient-to-r from-vibrant-blue to-vibrant-purple text-white">
+                    <Card className="overflow-hidden border-2 hover:border-vibrant-blue dark:hover:border-vibrant-dark-blue transition-colors duration-300">
+                      <CardHeader className="gradient-blue-purple">
                         <CardTitle>Upload Your CV</CardTitle>
-                        <CardDescription className="text-white/80">
+                        <CardDescription className="text-white/90 dark:text-white/90">
                           Upload your CV to automatically extract your skills
                           and experiences
                         </CardDescription>
@@ -205,13 +205,13 @@ export default function Dashboard() {
                           />
 
                           {error && (
-                            <div className="flex items-center gap-2 text-red-500 mt-2 text-sm">
+                            <div className="flex items-center gap-2 text-red-600 dark:text-red-400 mt-2 text-sm">
                               <AlertCircle className="h-4 w-4" />
                               <span>{error}</span>
                             </div>
                           )}
 
-                          <p className="text-xs text-gray-500 mt-1">
+                          <p className="text-xs text-muted-foreground mt-1">
                             For best results, use a simple formatted CV with
                             clear sections.
                           </p>
@@ -221,7 +221,7 @@ export default function Dashboard() {
                         <Button
                           onClick={handleCVUpload}
                           disabled={!file || isUploading}
-                          className="bg-gradient-to-r from-vibrant-blue to-vibrant-purple hover:opacity-90"
+                          className="gradient-blue-purple hover:opacity-90"
                         >
                           {isUploading ? (
                             "Processing..."
@@ -237,10 +237,10 @@ export default function Dashboard() {
                   </AnimatedElement>
 
                   <AnimatedElement animation="slide-up" delay={0.3}>
-                    <Card className="overflow-hidden border-2 hover:border-vibrant-purple transition-colors duration-300">
-                      <CardHeader className="bg-gradient-to-r from-vibrant-purple to-vibrant-pink text-white">
+                    <Card className="overflow-hidden border-2 hover:border-vibrant-purple dark:hover:border-vibrant-dark-purple transition-colors duration-300">
+                      <CardHeader className="gradient-purple-pink">
                         <CardTitle>Your Skills</CardTitle>
-                        <CardDescription className="text-white/80">
+                        <CardDescription className="text-white/90 dark:text-white/90">
                           Add or remove skills to improve your career
                           recommendations
                         </CardDescription>
@@ -256,7 +256,7 @@ export default function Dashboard() {
                           />
                           <Button
                             type="submit"
-                            className="bg-gradient-to-r from-vibrant-purple to-vibrant-pink hover:opacity-90"
+                            className="gradient-purple-pink hover:opacity-90"
                           >
                             Add
                           </Button>
@@ -274,7 +274,7 @@ export default function Dashboard() {
                               >
                                 <Badge
                                   variant="secondary"
-                                  className="flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-vibrant-blue/10 to-vibrant-purple/10 text-vibrant-purple"
+                                  className="flex items-center gap-1 px-3 py-1 badge-skill"
                                 >
                                   {skill}
                                   <button
@@ -291,7 +291,7 @@ export default function Dashboard() {
                             ))}
                           </AnimatePresence>
                           {skills.length === 0 && (
-                            <p className="text-sm text-gray-500">
+                            <p className="text-sm text-muted-foreground">
                               No skills added yet. Upload your CV or add skills
                               manually.
                             </p>
@@ -308,7 +308,7 @@ export default function Dashboard() {
                   {recommendations.length > 0 ? (
                     <>
                       <AnimatedElement animation="slide-up">
-                        <h2 className="text-2xl font-bold bg-gradient-to-r from-vibrant-blue to-vibrant-purple bg-clip-text text-transparent">
+                        <h2 className="text-2xl font-bold gradient-text">
                           Your Top Career Matches
                         </h2>
                       </AnimatedElement>
@@ -326,9 +326,9 @@ export default function Dashboard() {
                     </>
                   ) : (
                     <AnimatedElement animation="scale">
-                      <Card className="overflow-hidden border-2 border-dashed border-gray-300">
+                      <Card className="overflow-hidden border-2 border-dashed border-muted">
                         <CardHeader>
-                          <CardTitle className="text-vibrant-purple">
+                          <CardTitle className="gradient-text">
                             No Recommendations Yet
                           </CardTitle>
                           <CardDescription>
@@ -339,7 +339,7 @@ export default function Dashboard() {
                         <CardContent className="flex justify-center py-6">
                           <Button
                             onClick={() => setActiveTab("profile")}
-                            className="bg-gradient-to-r from-vibrant-blue to-vibrant-purple hover:opacity-90"
+                            className="gradient-blue-purple hover:opacity-90"
                           >
                             <FileText className="mr-2 h-4 w-4" />
                             Complete Your Profile
