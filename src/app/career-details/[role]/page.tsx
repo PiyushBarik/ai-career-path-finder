@@ -19,6 +19,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { industrySkills } from "@/lib/data";
 import { useState, useEffect } from "react";
+import { JobListings } from "@/components/job-listings";
 
 // Career descriptions with detailed information for each role
 const careerDescriptions: Record<string, any> = {
@@ -515,6 +516,7 @@ export default function CareerDetailsPage() {
   const params = useParams();
   const role = decodeURIComponent(params.role as string);
   const [careerData, setCareerData] = useState<any>(null);
+  const [activeTab, setActiveTab] = useState("skills");
 
   useEffect(() => {
     // Find the industry data from our data file
@@ -584,9 +586,13 @@ export default function CareerDetailsPage() {
             </Card>
           </AnimatedElement>
 
-          <Tabs defaultValue="skills" className="w-full">
+          <Tabs
+            value={activeTab}
+            onValueChange={setActiveTab}
+            className="w-full"
+          >
             <AnimatedElement animation="slide-up" delay={0.2}>
-              <TabsList className="grid w-full grid-cols-4 bg-muted">
+              <TabsList className="grid w-full grid-cols-5 bg-muted">
                 <TabsTrigger
                   value="skills"
                   className="data-[state=active]:gradient-blue-purple"
@@ -610,6 +616,12 @@ export default function CareerDetailsPage() {
                   className="data-[state=active]:gradient-blue-purple"
                 >
                   Education
+                </TabsTrigger>
+                <TabsTrigger
+                  value="job-market"
+                  className="data-[state=active]:gradient-blue-purple"
+                >
+                  Job Market
                 </TabsTrigger>
               </TabsList>
             </AnimatedElement>
@@ -1302,6 +1314,12 @@ export default function CareerDetailsPage() {
                     </div>
                   </CardContent>
                 </Card>
+              </AnimatedElement>
+            </TabsContent>
+
+            <TabsContent value="job-market" className="space-y-6 mt-6">
+              <AnimatedElement animation="slide-up" delay={0.3}>
+                <JobListings role={role} userSkills={careerData.skills} />
               </AnimatedElement>
             </TabsContent>
           </Tabs>

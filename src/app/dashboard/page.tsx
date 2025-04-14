@@ -26,6 +26,8 @@ import {
 import { Layout } from "@/components/layout";
 import { SkillGapCard } from "@/components/skill-gap-card";
 import { AnimatedElement } from "@/components/ui/animated-element";
+import { TrendingRoles } from "@/components/trending-roles";
+import { JobListings } from "@/components/job-listings";
 
 export default function Dashboard() {
   const [file, setFile] = useState<File | null>(null);
@@ -34,6 +36,8 @@ export default function Dashboard() {
   const [recommendations, setRecommendations] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState("profile");
   const [error, setError] = useState<string | null>(null);
+
+  // Existing functions remain the same
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setError(null);
@@ -85,8 +89,6 @@ export default function Dashboard() {
         setSkills((prevSkills) => [
           ...new Set([...prevSkills, ...extractedSkills]),
         ]);
-        // After skills are updated, get recommendations
-        await getRecommendations([...skills, ...extractedSkills]);
       }
     } catch (error) {
       console.error("Error uploading CV:", error);
@@ -163,7 +165,7 @@ export default function Dashboard() {
             className="w-full"
           >
             <AnimatedElement animation="slide-up" delay={0.1}>
-              <TabsList className="grid w-full grid-cols-2 bg-muted">
+              <TabsList className="grid w-full grid-cols-3 bg-muted">
                 <TabsTrigger
                   value="profile"
                   className="data-[state=active]:gradient-blue-purple"
@@ -176,11 +178,18 @@ export default function Dashboard() {
                 >
                   Recommendations
                 </TabsTrigger>
+                <TabsTrigger
+                  value="job-market"
+                  className="data-[state=active]:gradient-blue-purple"
+                >
+                  Job Market
+                </TabsTrigger>
               </TabsList>
             </AnimatedElement>
 
             {activeTab === "profile" && (
               <TabsContent value="profile" className="space-y-6">
+                {/* Existing profile content */}
                 <AnimatedElement animation="slide-up" delay={0.2}>
                   <Card className="overflow-hidden border-2 hover:border-vibrant-blue dark:hover:border-vibrant-dark-blue transition-colors duration-300">
                     <CardHeader className="gradient-blue-purple">
@@ -293,6 +302,7 @@ export default function Dashboard() {
 
             {activeTab === "recommendations" && (
               <TabsContent value="recommendations" className="space-y-6">
+                {/* Existing recommendations content */}
                 {recommendations.length > 0 ? (
                   <>
                     <AnimatedElement animation="slide-up">
@@ -318,6 +328,49 @@ export default function Dashboard() {
                         <CardDescription>
                           Add your skills or upload your CV to get personalized
                           career recommendations
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent className="flex justify-center py-6">
+                        <Button
+                          onClick={() => setActiveTab("profile")}
+                          className="gradient-blue-purple hover:opacity-90"
+                        >
+                          <FileText className="mr-2 h-4 w-4" />
+                          Complete Your Profile
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  </AnimatedElement>
+                )}
+              </TabsContent>
+            )}
+
+            {/* New Job Market tab */}
+            {activeTab === "job-market" && (
+              <TabsContent value="job-market" className="space-y-6">
+                <AnimatedElement animation="slide-up" delay={0.1}>
+                  <TrendingRoles />
+                </AnimatedElement>
+
+                {recommendations.length > 0 && recommendations[0] && (
+                  <AnimatedElement animation="slide-up" delay={0.2}>
+                    <JobListings
+                      role={recommendations[0].role}
+                      userSkills={skills}
+                    />
+                  </AnimatedElement>
+                )}
+
+                {recommendations.length === 0 && (
+                  <AnimatedElement animation="scale">
+                    <Card className="overflow-hidden border-2 border-dashed border-muted">
+                      <CardHeader>
+                        <CardTitle className="gradient-text">
+                          Get Personalized Job Listings
+                        </CardTitle>
+                        <CardDescription>
+                          Complete your profile to see job listings tailored to
+                          your skills and interests
                         </CardDescription>
                       </CardHeader>
                       <CardContent className="flex justify-center py-6">
