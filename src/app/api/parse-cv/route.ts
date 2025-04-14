@@ -37,7 +37,6 @@ export async function POST(request: NextRequest) {
           {
             error:
               "The CV is too large to process. Please try a smaller file or try again later.",
-            skills: ["JavaScript", "React", "TypeScript", "HTML", "CSS"],
           },
           { status: 200 }
         );
