@@ -14,6 +14,7 @@ import {
   Building,
   Users,
   BookOpen,
+  Route,
 } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -1339,12 +1340,28 @@ export default function CareerDetailsPage() {
                   Back to Dashboard
                 </Button>
               </Link>
-              <Link href={`/career-details/${encodeURIComponent(role)}/apply`}>
-                <Button className="gradient-blue-purple hover:opacity-90">
-                  <Building className="mr-2 h-4 w-4" />
-                  Find Job Opportunities
-                </Button>
-              </Link>
+              <div className="flex gap-2">
+                <Link
+                  href="/dashboard?tab=roadmap"
+                  onClick={() => localStorage.setItem("activeTab", "roadmap")}
+                >
+                  <Button
+                    variant="outline"
+                    className="border-vibrant-purple text-vibrant-purple dark:border-vibrant-dark-purple dark:text-vibrant-dark-purple"
+                  >
+                    <Route className="mr-2 h-4 w-4" />
+                    View Career Roadmap
+                  </Button>
+                </Link>
+                <Link
+                  href={`/career-details/${encodeURIComponent(role)}/apply`}
+                >
+                  <Button className="gradient-blue-purple hover:opacity-90">
+                    <Building className="mr-2 h-4 w-4" />
+                    Find Job Opportunities
+                  </Button>
+                </Link>
+              </div>
             </div>
           </AnimatedElement>
 

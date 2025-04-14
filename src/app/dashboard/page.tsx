@@ -22,12 +22,14 @@ import {
   Upload,
   XCircle,
   AlertCircle,
+  Route,
 } from "lucide-react";
 import { Layout } from "@/components/layout";
 import { SkillGapCard } from "@/components/skill-gap-card";
 import { AnimatedElement } from "@/components/ui/animated-element";
 import { TrendingRoles } from "@/components/trending-roles";
 import { JobListings } from "@/components/job-listings";
+import { CareerRoadmap } from "@/components/career-roadmap";
 
 export default function Dashboard() {
   const [file, setFile] = useState<File | null>(null);
@@ -36,6 +38,7 @@ export default function Dashboard() {
   const [recommendations, setRecommendations] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState("profile");
   const [error, setError] = useState<string | null>(null);
+  const [cvText, setCvText] = useState<string | null>(null);
 
   // Existing functions remain the same
 
@@ -89,6 +92,15 @@ export default function Dashboard() {
         setSkills((prevSkills) => [
           ...new Set([...prevSkills, ...extractedSkills]),
         ]);
+
+        // Store the CV text for roadmap generation
+        if (file.type === "text/plain") {
+          const text = await file.text();
+          setCvText(text);
+        } else {
+          // For non-text files, we'll just use the filename as a placeholder
+          setCvText(`CV uploaded: ${file.name}`);
+        }
       }
     } catch (error) {
       console.error("Error uploading CV:", error);
@@ -165,7 +177,7 @@ export default function Dashboard() {
             className="w-full"
           >
             <AnimatedElement animation="slide-up" delay={0.1}>
-              <TabsList className="grid w-full grid-cols-3 bg-muted">
+              <TabsList className="grid w-full grid-cols-4 bg-muted">
                 <TabsTrigger
                   value="profile"
                   className="data-[state=active]:gradient-blue-purple"
@@ -177,6 +189,12 @@ export default function Dashboard() {
                   className="data-[state=active]:gradient-blue-purple"
                 >
                   Recommendations
+                </TabsTrigger>
+                <TabsTrigger
+                  value="roadmap"
+                  className="data-[state=active]:gradient-blue-purple"
+                >
+                  Career Roadmap
                 </TabsTrigger>
                 <TabsTrigger
                   value="job-market"
@@ -345,7 +363,52 @@ export default function Dashboard() {
               </TabsContent>
             )}
 
-            {/* New Job Market tab */}
+            {/* New Career Roadmap tab */}
+            {activeTab === "roadmap" && (
+              <TabsContent value="roadmap" className="space-y-6">
+                <AnimatedElement animation="slide-up" delay={0.1}>
+                  {skills.length > 0 ? (
+                    <CareerRoadmap
+                      skills={skills}
+                      experience={cvText || undefined}
+                      role={
+                        recommendations.length > 0
+                          ? recommendations[0].role
+                          : undefined
+                      }
+                    />
+                  ) : (
+                    <Card className="overflow-hidden border-2 border-dashed border-muted">
+                      <CardHeader>
+                        <CardTitle className="gradient-text">
+                          Career Roadmap
+                        </CardTitle>
+                        <CardDescription>
+                          Add your skills or upload your CV to generate a
+                          personalized career roadmap
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent className="flex flex-col items-center justify-center py-6 text-center">
+                        <Route className="h-16 w-16 text-muted-foreground mb-4" />
+                        <p className="text-muted-foreground mb-6 max-w-md">
+                          Our AI will analyze your skills and experience to
+                          create a personalized career development plan.
+                        </p>
+                        <Button
+                          onClick={() => setActiveTab("profile")}
+                          className="gradient-blue-purple hover:opacity-90"
+                        >
+                          <FileText className="mr-2 h-4 w-4" />
+                          Complete Your Profile
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  )}
+                </AnimatedElement>
+              </TabsContent>
+            )}
+
+            {/* Job Market tab */}
             {activeTab === "job-market" && (
               <TabsContent value="job-market" className="space-y-6">
                 <AnimatedElement animation="slide-up" delay={0.1}>
