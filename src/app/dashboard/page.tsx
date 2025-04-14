@@ -25,7 +25,6 @@ import {
 } from "lucide-react";
 import { Layout } from "@/components/layout";
 import { SkillGapCard } from "@/components/skill-gap-card";
-import { motion, AnimatePresence } from "framer-motion";
 import { AnimatedElement } from "@/components/ui/animated-element";
 
 export default function Dashboard() {
@@ -180,177 +179,161 @@ export default function Dashboard() {
               </TabsList>
             </AnimatedElement>
 
-            <AnimatePresence mode="wait">
-              {activeTab === "profile" && (
-                <TabsContent value="profile" className="space-y-6">
-                  <AnimatedElement animation="slide-up" delay={0.2}>
-                    <Card className="overflow-hidden border-2 hover:border-vibrant-blue dark:hover:border-vibrant-dark-blue transition-colors duration-300">
-                      <CardHeader className="gradient-blue-purple">
-                        <CardTitle>Upload Your CV</CardTitle>
-                        <CardDescription className="text-white/90 dark:text-white/90">
-                          Upload your CV to automatically extract your skills
-                          and experiences
+            {activeTab === "profile" && (
+              <TabsContent value="profile" className="space-y-6">
+                <AnimatedElement animation="slide-up" delay={0.2}>
+                  <Card className="overflow-hidden border-2 hover:border-vibrant-blue dark:hover:border-vibrant-dark-blue transition-colors duration-300">
+                    <CardHeader className="gradient-blue-purple">
+                      <CardTitle>Upload Your CV</CardTitle>
+                      <CardDescription className="text-white/90 dark:text-white/90">
+                        Upload your CV to automatically extract your skills and
+                        experiences
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="pt-6">
+                      <div className="grid w-full max-w-sm items-center gap-1.5">
+                        <Label htmlFor="cv">
+                          CV File (PDF or Word, max 5MB)
+                        </Label>
+                        <Input
+                          id="cv"
+                          type="file"
+                          onChange={handleFileChange}
+                          accept=".pdf,.doc,.docx,.txt"
+                        />
+
+                        {error && (
+                          <div className="flex items-center gap-2 text-red-600 dark:text-red-400 mt-2 text-sm">
+                            <AlertCircle className="h-4 w-4" />
+                            <span>{error}</span>
+                          </div>
+                        )}
+
+                        <p className="text-xs text-muted-foreground mt-1">
+                          For best results, use a simple formatted CV with clear
+                          sections.
+                        </p>
+                      </div>
+                    </CardContent>
+                    <CardFooter>
+                      <Button
+                        onClick={handleCVUpload}
+                        disabled={!file || isUploading}
+                        className="gradient-blue-purple hover:opacity-90"
+                      >
+                        {isUploading ? (
+                          "Processing..."
+                        ) : (
+                          <>
+                            <Upload className="mr-2 h-4 w-4" />
+                            Upload and Analyze
+                          </>
+                        )}
+                      </Button>
+                    </CardFooter>
+                  </Card>
+                </AnimatedElement>
+
+                <AnimatedElement animation="slide-up" delay={0.3}>
+                  <Card className="overflow-hidden border-2 hover:border-vibrant-purple dark:hover:border-vibrant-dark-purple transition-colors duration-300">
+                    <CardHeader className="gradient-purple-pink">
+                      <CardTitle>Your Skills</CardTitle>
+                      <CardDescription className="text-white/90 dark:text-white/90">
+                        Add or remove skills to improve your career
+                        recommendations
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="pt-6">
+                      <form
+                        onSubmit={handleAddSkill}
+                        className="flex w-full max-w-sm items-center space-x-2"
+                      >
+                        <Input
+                          name="skill"
+                          placeholder="Add a skill (e.g., Python, Leadership)"
+                        />
+                        <Button
+                          type="submit"
+                          className="gradient-purple-pink hover:opacity-90"
+                        >
+                          Add
+                        </Button>
+                      </form>
+
+                      <div className="mt-4 flex flex-wrap gap-2">
+                        {skills.map((skill) => (
+                          <div key={skill}>
+                            <Badge
+                              variant="secondary"
+                              className="flex items-center gap-1 px-3 py-1 badge-skill"
+                            >
+                              {skill}
+                              <button
+                                onClick={() => handleRemoveSkill(skill)}
+                                className="ml-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"
+                              >
+                                <XCircle className="h-4 w-4" />
+                                <span className="sr-only">Remove {skill}</span>
+                              </button>
+                            </Badge>
+                          </div>
+                        ))}
+                        {skills.length === 0 && (
+                          <p className="text-sm text-muted-foreground">
+                            No skills added yet. Upload your CV or add skills
+                            manually.
+                          </p>
+                        )}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </AnimatedElement>
+              </TabsContent>
+            )}
+
+            {activeTab === "recommendations" && (
+              <TabsContent value="recommendations" className="space-y-6">
+                {recommendations.length > 0 ? (
+                  <>
+                    <AnimatedElement animation="slide-up">
+                      <h2 className="text-2xl font-bold gradient-text">
+                        Your Top Career Matches
+                      </h2>
+                    </AnimatedElement>
+                    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                      {recommendations.map((rec, index) => (
+                        <div key={index} className="h-full">
+                          <SkillGapCard recommendation={rec} />
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <AnimatedElement animation="scale">
+                    <Card className="overflow-hidden border-2 border-dashed border-muted">
+                      <CardHeader>
+                        <CardTitle className="gradient-text">
+                          No Recommendations Yet
+                        </CardTitle>
+                        <CardDescription>
+                          Add your skills or upload your CV to get personalized
+                          career recommendations
                         </CardDescription>
                       </CardHeader>
-                      <CardContent className="pt-6">
-                        <div className="grid w-full max-w-sm items-center gap-1.5">
-                          <Label htmlFor="cv">
-                            CV File (PDF or Word, max 5MB)
-                          </Label>
-                          <Input
-                            id="cv"
-                            type="file"
-                            onChange={handleFileChange}
-                            accept=".pdf,.doc,.docx,.txt"
-                          />
-
-                          {error && (
-                            <div className="flex items-center gap-2 text-red-600 dark:text-red-400 mt-2 text-sm">
-                              <AlertCircle className="h-4 w-4" />
-                              <span>{error}</span>
-                            </div>
-                          )}
-
-                          <p className="text-xs text-muted-foreground mt-1">
-                            For best results, use a simple formatted CV with
-                            clear sections.
-                          </p>
-                        </div>
-                      </CardContent>
-                      <CardFooter>
+                      <CardContent className="flex justify-center py-6">
                         <Button
-                          onClick={handleCVUpload}
-                          disabled={!file || isUploading}
+                          onClick={() => setActiveTab("profile")}
                           className="gradient-blue-purple hover:opacity-90"
                         >
-                          {isUploading ? (
-                            "Processing..."
-                          ) : (
-                            <>
-                              <Upload className="mr-2 h-4 w-4" />
-                              Upload and Analyze
-                            </>
-                          )}
+                          <FileText className="mr-2 h-4 w-4" />
+                          Complete Your Profile
                         </Button>
-                      </CardFooter>
-                    </Card>
-                  </AnimatedElement>
-
-                  <AnimatedElement animation="slide-up" delay={0.3}>
-                    <Card className="overflow-hidden border-2 hover:border-vibrant-purple dark:hover:border-vibrant-dark-purple transition-colors duration-300">
-                      <CardHeader className="gradient-purple-pink">
-                        <CardTitle>Your Skills</CardTitle>
-                        <CardDescription className="text-white/90 dark:text-white/90">
-                          Add or remove skills to improve your career
-                          recommendations
-                        </CardDescription>
-                      </CardHeader>
-                      <CardContent className="pt-6">
-                        <form
-                          onSubmit={handleAddSkill}
-                          className="flex w-full max-w-sm items-center space-x-2"
-                        >
-                          <Input
-                            name="skill"
-                            placeholder="Add a skill (e.g., Python, Leadership)"
-                          />
-                          <Button
-                            type="submit"
-                            className="gradient-purple-pink hover:opacity-90"
-                          >
-                            Add
-                          </Button>
-                        </form>
-
-                        <div className="mt-4 flex flex-wrap gap-2">
-                          <AnimatePresence>
-                            {skills.map((skill) => (
-                              <motion.div
-                                key={skill}
-                                initial={{ opacity: 0, scale: 0.8 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                exit={{ opacity: 0, scale: 0.8 }}
-                                transition={{ duration: 0.3 }}
-                              >
-                                <Badge
-                                  variant="secondary"
-                                  className="flex items-center gap-1 px-3 py-1 badge-skill"
-                                >
-                                  {skill}
-                                  <button
-                                    onClick={() => handleRemoveSkill(skill)}
-                                    className="ml-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"
-                                  >
-                                    <XCircle className="h-4 w-4" />
-                                    <span className="sr-only">
-                                      Remove {skill}
-                                    </span>
-                                  </button>
-                                </Badge>
-                              </motion.div>
-                            ))}
-                          </AnimatePresence>
-                          {skills.length === 0 && (
-                            <p className="text-sm text-muted-foreground">
-                              No skills added yet. Upload your CV or add skills
-                              manually.
-                            </p>
-                          )}
-                        </div>
                       </CardContent>
                     </Card>
                   </AnimatedElement>
-                </TabsContent>
-              )}
-
-              {activeTab === "recommendations" && (
-                <TabsContent value="recommendations" className="space-y-6">
-                  {recommendations.length > 0 ? (
-                    <>
-                      <AnimatedElement animation="slide-up">
-                        <h2 className="text-2xl font-bold gradient-text">
-                          Your Top Career Matches
-                        </h2>
-                      </AnimatedElement>
-                      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                        {recommendations.map((rec, index) => (
-                          <AnimatedElement
-                            key={index}
-                            animation="slide-up"
-                            delay={0.1 * index}
-                          >
-                            <SkillGapCard recommendation={rec} />
-                          </AnimatedElement>
-                        ))}
-                      </div>
-                    </>
-                  ) : (
-                    <AnimatedElement animation="scale">
-                      <Card className="overflow-hidden border-2 border-dashed border-muted">
-                        <CardHeader>
-                          <CardTitle className="gradient-text">
-                            No Recommendations Yet
-                          </CardTitle>
-                          <CardDescription>
-                            Add your skills or upload your CV to get
-                            personalized career recommendations
-                          </CardDescription>
-                        </CardHeader>
-                        <CardContent className="flex justify-center py-6">
-                          <Button
-                            onClick={() => setActiveTab("profile")}
-                            className="gradient-blue-purple hover:opacity-90"
-                          >
-                            <FileText className="mr-2 h-4 w-4" />
-                            Complete Your Profile
-                          </Button>
-                        </CardContent>
-                      </Card>
-                    </AnimatedElement>
-                  )}
-                </TabsContent>
-              )}
-            </AnimatePresence>
+                )}
+              </TabsContent>
+            )}
           </Tabs>
         </div>
       </div>

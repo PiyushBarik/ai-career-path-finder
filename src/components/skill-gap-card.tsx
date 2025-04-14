@@ -10,9 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { CheckCircle, XCircle, BookOpen } from "lucide-react";
-import { motion } from "framer-motion";
 import { useState } from "react";
 import Link from "next/link";
 
@@ -32,23 +30,54 @@ interface SkillGapCardProps {
 export function SkillGapCard({ recommendation }: SkillGapCardProps) {
   const [isHovered, setIsHovered] = useState(false);
 
+  // Limit the number of skills displayed to maintain consistent card height
+  const maxSkillsToShow = 5;
+  const maxCoursesToShow = 2;
+
+  // Truncate skills arrays if they're too long
+  const displayedExistingSkills = recommendation.existingSkills.slice(
+    0,
+    maxSkillsToShow
+  );
+  const displayedMissingSkills = recommendation.missingSkills.slice(
+    0,
+    maxSkillsToShow
+  );
+  const displayedCourses = recommendation.recommendedCourses.slice(
+    0,
+    maxCoursesToShow
+  );
+
+  // Calculate if we're hiding any skills
+  const hiddenExistingSkillsCount = Math.max(
+    0,
+    recommendation.existingSkills.length - maxSkillsToShow
+  );
+  const hiddenMissingSkillsCount = Math.max(
+    0,
+    recommendation.missingSkills.length - maxSkillsToShow
+  );
+  const hiddenCoursesCount = Math.max(
+    0,
+    recommendation.recommendedCourses.length - maxCoursesToShow
+  );
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      whileHover={{
-        y: -5,
-        transition: { duration: 0.2 },
-      }}
-      onHoverStart={() => setIsHovered(true)}
-      onHoverEnd={() => setIsHovered(false)}
-    >
-      <Card className="overflow-hidden border-2 transition-all duration-300 h-full bg-card">
+    <div className="h-full">
+      <Card
+        className="overflow-hidden border-2 h-full bg-card flex flex-col transition-all duration-300"
+        style={{
+          transform: isHovered ? "translateY(-5px)" : "translateY(0)",
+          boxShadow: isHovered
+            ? "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)"
+            : "none",
+        }}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
         <div
-          className={`absolute inset-0 bg-gradient-to-br from-vibrant-blue/5 to-vibrant-purple/5 dark:from-vibrant-blue/10 dark:to-vibrant-purple/10 transition-opacity duration-300 ${
-            isHovered ? "opacity-100" : "opacity-0"
-          }`}
+          className="absolute inset-0 bg-gradient-to-br from-vibrant-blue/5 to-vibrant-purple/5 dark:from-vibrant-blue/10 dark:to-vibrant-purple/10 transition-opacity duration-300"
+          style={{ opacity: isHovered ? 1 : 0 }}
         />
         <CardHeader className="relative">
           <CardTitle className="gradient-text">{recommendation.role}</CardTitle>
@@ -56,7 +85,7 @@ export function SkillGapCard({ recommendation }: SkillGapCardProps) {
             Match: {recommendation.matchPercentage}%
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4 relative">
+        <CardContent className="space-y-4 relative flex-grow">
           <div>
             <div className="mb-2 flex items-center justify-between">
               <span className="text-sm font-medium">Skills Match</span>
@@ -64,11 +93,7 @@ export function SkillGapCard({ recommendation }: SkillGapCardProps) {
                 {recommendation.matchPercentage}%
               </span>
             </div>
-            <motion.div
-              initial={{ width: 0 }}
-              animate={{ width: "100%" }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-            >
+            <div className="w-full">
               <Progress
                 value={recommendation.matchPercentage}
                 className="h-2 bg-gray-200 dark:bg-gray-700"
@@ -78,7 +103,7 @@ export function SkillGapCard({ recommendation }: SkillGapCardProps) {
                   style={{ width: `${recommendation.matchPercentage}%` }}
                 />
               </Progress>
-            </motion.div>
+            </div>
           </div>
 
           <div className="space-y-2">
@@ -87,18 +112,16 @@ export function SkillGapCard({ recommendation }: SkillGapCardProps) {
               Skills You Have
             </h3>
             <div className="flex flex-wrap gap-2">
-              {recommendation.existingSkills.map((skill, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.3, delay: 0.1 * index }}
-                >
-                  <Badge variant="outline" className="badge-skill">
-                    {skill}
-                  </Badge>
-                </motion.div>
+              {displayedExistingSkills.map((skill, index) => (
+                <Badge key={index} variant="outline" className="badge-skill">
+                  {skill}
+                </Badge>
               ))}
+              {hiddenExistingSkillsCount > 0 && (
+                <Badge variant="outline" className="badge-skill">
+                  +{hiddenExistingSkillsCount} more
+                </Badge>
+              )}
             </div>
           </div>
 
@@ -108,18 +131,20 @@ export function SkillGapCard({ recommendation }: SkillGapCardProps) {
               Skills You Need
             </h3>
             <div className="flex flex-wrap gap-2">
-              {recommendation.missingSkills.map((skill, index) => (
-                <motion.div
+              {displayedMissingSkills.map((skill, index) => (
+                <Badge
                   key={index}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.3, delay: 0.1 * index }}
+                  variant="outline"
+                  className="badge-skill-missing"
                 >
-                  <Badge variant="outline" className="badge-skill-missing">
-                    {skill}
-                  </Badge>
-                </motion.div>
+                  {skill}
+                </Badge>
               ))}
+              {hiddenMissingSkillsCount > 0 && (
+                <Badge variant="outline" className="badge-skill-missing">
+                  +{hiddenMissingSkillsCount} more
+                </Badge>
+              )}
             </div>
           </div>
 
@@ -130,38 +155,40 @@ export function SkillGapCard({ recommendation }: SkillGapCardProps) {
                 Recommended Courses
               </h3>
               <ul className="space-y-1">
-                {recommendation.recommendedCourses.map((course, index) => (
-                  <motion.li
-                    key={index}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.3, delay: 0.2 + 0.1 * index }}
-                    className="text-sm"
-                  >
+                {displayedCourses.map((course, index) => (
+                  <li key={index} className="text-sm truncate">
                     <span className="font-medium text-vibrant-blue dark:text-vibrant-dark-blue">
                       {course.code}
                     </span>
                     : {course.name}
-                  </motion.li>
+                  </li>
                 ))}
+                {hiddenCoursesCount > 0 && (
+                  <li className="text-sm text-muted-foreground">
+                    +{hiddenCoursesCount} more courses
+                  </li>
+                )}
               </ul>
             </div>
           )}
         </CardContent>
-        <CardFooter className="relative">
-          <Link
-            href={`/career-details/${encodeURIComponent(recommendation.role)}`}
-            className="w-full"
-          >
-            <Button
-              variant="outline"
-              className="w-full gradient-blue-purple hover:opacity-90 border-0"
+        <CardFooter className="relative mt-auto">
+          <div className="w-full">
+            <Link
+              href={`/career-details/${encodeURIComponent(
+                recommendation.role
+              )}`}
+              className="w-full block"
             >
-              View Career Details
-            </Button>
-          </Link>
+              <div className="w-full static-gradient-button">
+                <span className="block w-full py-2 px-4 text-center text-white font-medium rounded-md">
+                  View Career Details
+                </span>
+              </div>
+            </Link>
+          </div>
         </CardFooter>
       </Card>
-    </motion.div>
+    </div>
   );
 }

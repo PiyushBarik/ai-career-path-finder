@@ -13,149 +13,525 @@ import {
   GraduationCap,
   Building,
   Users,
+  BookOpen,
 } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { industrySkills } from "@/lib/data";
 import { useState, useEffect } from "react";
 
+// Career descriptions with detailed information for each role
+const careerDescriptions: Record<string, any> = {
+  "Software Developer": {
+    description:
+      "Software developers design, build, and maintain computer programs. They work in a variety of industries, including technology, finance, healthcare, and entertainment. They use programming languages and tools to create applications that solve problems and enhance user experiences.",
+    dailyTasks: [
+      "Writing and testing code",
+      "Debugging and fixing issues",
+      "Collaborating with team members",
+      "Participating in code reviews",
+      "Researching new technologies",
+      "Documenting software functionality",
+      "Meeting with stakeholders to discuss requirements",
+    ],
+    salaryRange: "£25,000 - £70,000+",
+    growthRate: "22% (Much faster than average)",
+    workEnvironment:
+      "Office-based or remote work, often in collaborative teams",
+    industries: [
+      "Technology",
+      "Finance",
+      "Healthcare",
+      "E-commerce",
+      "Entertainment",
+      "Education",
+      "Government",
+    ],
+    keyTools: ["Git", "VS Code", "Docker", "Jira", "CI/CD tools"],
+  },
+  "Frontend Developer": {
+    description:
+      "Frontend developers create the user interfaces of websites and applications. They focus on what users see and interact with, ensuring that digital products are visually appealing, responsive, and user-friendly across different devices and browsers.",
+    dailyTasks: [
+      "Building responsive user interfaces",
+      "Implementing designs from mockups",
+      "Optimizing web performance",
+      "Testing cross-browser compatibility",
+      "Collaborating with designers and backend developers",
+      "Maintaining and improving existing code",
+    ],
+    salaryRange: "£25,000 - £65,000+",
+    growthRate: "15% (Faster than average)",
+    workEnvironment:
+      "Office-based or remote work, often in collaborative teams",
+    industries: ["Technology", "E-commerce", "Media", "Marketing", "Education"],
+    keyTools: [
+      "React",
+      "Next.js",
+      "CSS frameworks",
+      "Figma",
+      "Chrome DevTools",
+    ],
+  },
+  "Full Stack Developer": {
+    description:
+      "Full stack developers work on both frontend and backend aspects of web applications. They have a comprehensive understanding of how web applications work from top to bottom, allowing them to build complete, end-to-end solutions.",
+    dailyTasks: [
+      "Developing frontend and backend features",
+      "Setting up databases and server environments",
+      "Integrating APIs and services",
+      "Optimizing application performance",
+      "Implementing security measures",
+      "Deploying applications to production",
+    ],
+    salaryRange: "£30,000 - £75,000+",
+    growthRate: "20% (Much faster than average)",
+    workEnvironment: "Office-based or remote work, often in agile teams",
+    industries: [
+      "Technology",
+      "Finance",
+      "E-commerce",
+      "Healthcare",
+      "Education",
+    ],
+    keyTools: [
+      "JavaScript/TypeScript",
+      "Node.js",
+      "React",
+      "MongoDB/SQL",
+      "AWS/Azure",
+    ],
+  },
+  "Mobile Developer": {
+    description:
+      "Mobile developers create applications for mobile devices such as smartphones and tablets. They specialize in developing for specific platforms like iOS or Android, or use cross-platform frameworks to build apps that work across multiple devices.",
+    dailyTasks: [
+      "Designing and building mobile applications",
+      "Testing apps on different devices",
+      "Optimizing app performance and battery usage",
+      "Implementing platform-specific features",
+      "Fixing bugs and addressing user feedback",
+      "Publishing apps to app stores",
+    ],
+    salaryRange: "£28,000 - £70,000+",
+    growthRate: "22% (Much faster than average)",
+    workEnvironment:
+      "Office-based or remote work, often in product-focused teams",
+    industries: [
+      "Technology",
+      "Entertainment",
+      "E-commerce",
+      "Healthcare",
+      "Finance",
+    ],
+    keyTools: [
+      "React Native",
+      "Swift",
+      "Kotlin",
+      "Firebase",
+      "Xcode/Android Studio",
+    ],
+  },
+  "Data Scientist": {
+    description:
+      "Data scientists analyze and interpret complex data to help organizations make better decisions. They use statistical methods, machine learning, and programming to extract insights from data and develop predictive models that solve business problems.",
+    dailyTasks: [
+      "Collecting and cleaning data",
+      "Building predictive models",
+      "Visualizing data and findings",
+      "Communicating insights to stakeholders",
+      "Staying updated on new algorithms and methods",
+      "Implementing machine learning solutions",
+      "Evaluating model performance",
+    ],
+    salaryRange: "£30,000 - £80,000+",
+    growthRate: "31% (Much faster than average)",
+    workEnvironment: "Office-based or remote work, often in research teams",
+    industries: [
+      "Technology",
+      "Finance",
+      "Healthcare",
+      "Retail",
+      "Government",
+      "Manufacturing",
+      "Telecommunications",
+    ],
+    keyTools: [
+      "Python",
+      "R",
+      "SQL",
+      "Jupyter Notebooks",
+      "TensorFlow/PyTorch",
+      "Tableau/PowerBI",
+    ],
+  },
+  "AI Research Scientist": {
+    description:
+      "AI Research Scientists develop new algorithms and models to advance artificial intelligence. They conduct experiments, publish research papers, and create innovative AI solutions that push the boundaries of what machines can do.",
+    dailyTasks: [
+      "Designing and implementing AI algorithms",
+      "Conducting experiments and analyzing results",
+      "Reading and writing research papers",
+      "Collaborating with other researchers",
+      "Presenting findings at conferences",
+      "Developing prototypes of AI systems",
+      "Staying current with the latest AI research",
+    ],
+    salaryRange: "£40,000 - £100,000+",
+    growthRate: "15% (Much faster than average)",
+    workEnvironment: "Research labs, universities, or tech companies",
+    industries: [
+      "Technology",
+      "Academia",
+      "Healthcare",
+      "Finance",
+      "Automotive",
+      "Robotics",
+      "Defense",
+    ],
+    keyTools: [
+      "Python",
+      "TensorFlow/PyTorch",
+      "CUDA",
+      "Cloud Computing",
+      "Linux",
+    ],
+  },
+  "Cybersecurity Analyst": {
+    description:
+      "Cybersecurity analysts protect organizations from digital threats. They monitor systems, identify vulnerabilities, and respond to security incidents to keep data and networks secure from hackers and other malicious actors.",
+    dailyTasks: [
+      "Monitoring network traffic for suspicious activity",
+      "Implementing security measures",
+      "Conducting vulnerability assessments",
+      "Responding to security incidents",
+      "Staying updated on emerging threats",
+      "Developing security policies and procedures",
+      "Training employees on security awareness",
+    ],
+    salaryRange: "£30,000 - £75,000+",
+    growthRate: "33% (Much faster than average)",
+    workEnvironment:
+      "Office-based or remote work, often in security operations centers",
+    industries: [
+      "Technology",
+      "Finance",
+      "Government",
+      "Healthcare",
+      "Defense",
+      "Retail",
+      "Energy",
+    ],
+    keyTools: [
+      "SIEM tools",
+      "Penetration testing software",
+      "Firewalls",
+      "Encryption tools",
+      "Vulnerability scanners",
+    ],
+  },
+  "Business Analyst": {
+    description:
+      "Business analysts bridge the gap between business needs and technology solutions. They analyze processes, identify problems, and recommend improvements to help organizations achieve their goals and operate more efficiently.",
+    dailyTasks: [
+      "Gathering and documenting requirements",
+      "Analyzing business processes",
+      "Creating process models and flowcharts",
+      "Facilitating meetings with stakeholders",
+      "Testing and validating solutions",
+      "Preparing business cases",
+      "Monitoring project progress",
+    ],
+    salaryRange: "£28,000 - £65,000+",
+    growthRate: "11% (Faster than average)",
+    workEnvironment:
+      "Office-based with frequent interaction with different departments",
+    industries: [
+      "Finance",
+      "Technology",
+      "Healthcare",
+      "Retail",
+      "Manufacturing",
+      "Consulting",
+      "Government",
+    ],
+    keyTools: [
+      "Microsoft Office",
+      "SQL",
+      "Tableau/PowerBI",
+      "JIRA",
+      "Visio/Lucidchart",
+    ],
+  },
+  "IT Project Manager": {
+    description:
+      "IT project managers plan, execute, and oversee technology projects. They ensure projects are completed on time, within budget, and according to specifications, coordinating the work of technical teams and communicating with stakeholders.",
+    dailyTasks: [
+      "Creating project plans and schedules",
+      "Allocating resources and managing budgets",
+      "Coordinating team members and activities",
+      "Tracking progress and addressing issues",
+      "Communicating with stakeholders",
+      "Managing risks and dependencies",
+      "Conducting post-project reviews",
+    ],
+    salaryRange: "£35,000 - £80,000+",
+    growthRate: "9% (Average)",
+    workEnvironment: "Office-based with frequent meetings and collaboration",
+    industries: [
+      "Technology",
+      "Finance",
+      "Healthcare",
+      "Government",
+      "Consulting",
+      "Manufacturing",
+      "Retail",
+    ],
+    keyTools: [
+      "Microsoft Project",
+      "JIRA",
+      "Asana/Trello",
+      "Slack",
+      "Microsoft Office",
+    ],
+  },
+  "Cloud Engineer": {
+    description:
+      "Cloud engineers design, implement, and manage cloud-based systems and infrastructure. They help organizations migrate to the cloud, optimize cloud resources, and ensure the security and reliability of cloud environments.",
+    dailyTasks: [
+      "Designing cloud architecture",
+      "Implementing cloud solutions",
+      "Automating deployment processes",
+      "Monitoring cloud performance",
+      "Optimizing cloud costs",
+      "Ensuring cloud security",
+      "Troubleshooting cloud issues",
+    ],
+    salaryRange: "£35,000 - £85,000+",
+    growthRate: "15% (Much faster than average)",
+    workEnvironment: "Office-based or remote work, often in technical teams",
+    industries: [
+      "Technology",
+      "Finance",
+      "Healthcare",
+      "Retail",
+      "Manufacturing",
+      "Government",
+      "Media",
+    ],
+    keyTools: [
+      "AWS/Azure/GCP",
+      "Terraform",
+      "Docker",
+      "Kubernetes",
+      "CI/CD tools",
+    ],
+  },
+  "Network Engineer": {
+    description:
+      "Network engineers design, implement, and maintain computer networks. They ensure reliable connectivity and optimal performance for organizations' communication systems, from local area networks to global infrastructure.",
+    dailyTasks: [
+      "Configuring network hardware and software",
+      "Monitoring network performance",
+      "Troubleshooting connectivity issues",
+      "Implementing security measures",
+      "Planning network upgrades",
+      "Documenting network infrastructure",
+      "Providing technical support",
+    ],
+    salaryRange: "£30,000 - £70,000+",
+    growthRate: "5% (Average)",
+    workEnvironment:
+      "Office-based with some on-site work at different locations",
+    industries: [
+      "Technology",
+      "Telecommunications",
+      "Finance",
+      "Healthcare",
+      "Education",
+      "Government",
+      "Retail",
+    ],
+    keyTools: [
+      "Cisco/Juniper equipment",
+      "Network monitoring tools",
+      "Wireshark",
+      "VPN technologies",
+      "Firewalls",
+    ],
+  },
+  "Mechanical Engineer": {
+    description:
+      "Mechanical engineers design, develop, and test mechanical devices and systems. They apply principles of physics and materials science to create solutions for various industries, from consumer products to industrial machinery.",
+    dailyTasks: [
+      "Creating designs using CAD software",
+      "Analyzing and testing prototypes",
+      "Solving engineering problems",
+      "Collaborating with other engineers",
+      "Documenting technical specifications",
+      "Overseeing manufacturing processes",
+      "Ensuring compliance with standards",
+    ],
+    salaryRange: "£28,000 - £65,000+",
+    growthRate: "7% (Average)",
+    workEnvironment:
+      "Office-based with time in workshops or manufacturing facilities",
+    industries: [
+      "Manufacturing",
+      "Automotive",
+      "Aerospace",
+      "Energy",
+      "Consumer Products",
+      "Medical Devices",
+      "Construction",
+    ],
+    keyTools: [
+      "CAD software",
+      "Simulation tools",
+      "3D printing",
+      "Testing equipment",
+      "Project management software",
+    ],
+  },
+  "Electrical Engineer": {
+    description:
+      "Electrical engineers design, develop, and test electrical systems and components. They work on everything from small electronic devices to large power generation systems, ensuring they function safely and efficiently.",
+    dailyTasks: [
+      "Designing electrical systems and components",
+      "Creating technical drawings and specifications",
+      "Testing and validating designs",
+      "Troubleshooting electrical problems",
+      "Ensuring compliance with safety standards",
+      "Collaborating with other engineers",
+      "Supervising technicians and installers",
+    ],
+    salaryRange: "£28,000 - £70,000+",
+    growthRate: "7% (Average)",
+    workEnvironment:
+      "Office-based with time in labs or on-site at installations",
+    industries: [
+      "Energy",
+      "Manufacturing",
+      "Telecommunications",
+      "Automotive",
+      "Aerospace",
+      "Consumer Electronics",
+      "Construction",
+    ],
+    keyTools: [
+      "CAD software",
+      "Circuit simulation tools",
+      "Oscilloscopes",
+      "Multimeters",
+      "PCB design software",
+    ],
+  },
+  "Civil Engineer": {
+    description:
+      "Civil engineers design, build, and maintain infrastructure projects. They work on roads, buildings, bridges, water systems, and other structures essential to modern society, ensuring they are safe, efficient, and environmentally sound.",
+    dailyTasks: [
+      "Creating designs and plans for projects",
+      "Analyzing survey reports and maps",
+      "Estimating costs and materials",
+      "Supervising construction activities",
+      "Ensuring compliance with regulations",
+      "Conducting site inspections",
+      "Collaborating with architects and contractors",
+    ],
+    salaryRange: "£25,000 - £65,000+",
+    growthRate: "8% (Average)",
+    workEnvironment: "Split between office and construction sites",
+    industries: [
+      "Construction",
+      "Government",
+      "Transportation",
+      "Utilities",
+      "Consulting",
+      "Environmental",
+      "Urban Planning",
+    ],
+    keyTools: [
+      "CAD software",
+      "Structural analysis tools",
+      "GIS software",
+      "Project management software",
+      "Surveying equipment",
+    ],
+  },
+  "Financial Analyst": {
+    description:
+      "Financial analysts evaluate investment opportunities and provide guidance on financial decisions. They analyze financial data, market trends, and economic conditions to help organizations and individuals make informed choices about investments and financial strategies.",
+    dailyTasks: [
+      "Analyzing financial statements and data",
+      "Creating financial models and forecasts",
+      "Researching market trends",
+      "Preparing reports and presentations",
+      "Making investment recommendations",
+      "Monitoring portfolio performance",
+      "Meeting with clients or management",
+    ],
+    salaryRange: "£28,000 - £70,000+",
+    growthRate: "9% (Average)",
+    workEnvironment: "Office-based, often in financial institutions",
+    industries: [
+      "Banking",
+      "Investment",
+      "Insurance",
+      "Corporate Finance",
+      "Consulting",
+      "Real Estate",
+      "Government",
+    ],
+    keyTools: [
+      "Excel",
+      "Financial modeling software",
+      "Bloomberg Terminal",
+      "SQL",
+      "PowerBI/Tableau",
+    ],
+  },
+};
+
+// Default career information for roles not explicitly defined
+const defaultCareerInfo = {
+  description:
+    "This professional specializes in their field, applying expertise and knowledge to solve problems and drive innovation.",
+  dailyTasks: [
+    "Applying specialized knowledge to projects and tasks",
+    "Collaborating with team members and stakeholders",
+    "Analyzing problems and developing solutions",
+    "Staying current with industry developments",
+    "Documenting work and sharing knowledge",
+  ],
+  salaryRange: "Varies by experience and location",
+  growthRate: "Varies by industry and specialization",
+  workEnvironment:
+    "Typically office-based or remote, depending on the organization",
+  industries: ["Various industries depending on specialization"],
+  keyTools: ["Industry-specific software and tools"],
+};
+
 export default function CareerDetailsPage() {
   const params = useParams();
   const role = decodeURIComponent(params.role as string);
   const [careerData, setCareerData] = useState<any>(null);
 
-  // Sample career descriptions for demonstration
-  const careerDescriptions: Record<string, any> = {
-    "Software Developer": {
-      description:
-        "Software developers design, build, and maintain computer programs. They work in a variety of industries, including technology, finance, healthcare, and entertainment.",
-      dailyTasks: [
-        "Writing and testing code",
-        "Debugging and fixing issues",
-        "Collaborating with team members",
-        "Participating in code reviews",
-        "Researching new technologies",
-      ],
-      salaryRange: "£25,000 - £70,000+",
-      growthRate: "22% (Much faster than average)",
-      workEnvironment:
-        "Office-based or remote work, often in collaborative teams",
-      industries: [
-        "Technology",
-        "Finance",
-        "Healthcare",
-        "E-commerce",
-        "Entertainment",
-      ],
-    },
-    "Data Scientist": {
-      description:
-        "Data scientists analyze and interpret complex data to help organizations make better decisions. They use statistical methods, machine learning, and programming to extract insights from data.",
-      dailyTasks: [
-        "Collecting and cleaning data",
-        "Building predictive models",
-        "Visualizing data and findings",
-        "Communicating insights to stakeholders",
-        "Staying updated on new algorithms and methods",
-      ],
-      salaryRange: "£30,000 - £80,000+",
-      growthRate: "31% (Much faster than average)",
-      workEnvironment: "Office-based or remote work, often in research teams",
-      industries: [
-        "Technology",
-        "Finance",
-        "Healthcare",
-        "Retail",
-        "Government",
-      ],
-    },
-    "UX Designer": {
-      description:
-        "UX designers create meaningful and relevant experiences for users. They research, prototype, and design digital products and services with a focus on usability and accessibility.",
-      dailyTasks: [
-        "Conducting user research",
-        "Creating wireframes and prototypes",
-        "Testing designs with users",
-        "Collaborating with developers",
-        "Iterating designs based on feedback",
-      ],
-      salaryRange: "£25,000 - £65,000+",
-      growthRate: "13% (Faster than average)",
-      workEnvironment: "Studio or office environment, often in creative teams",
-      industries: [
-        "Technology",
-        "Design Agencies",
-        "E-commerce",
-        "Media",
-        "Education",
-      ],
-    },
-    "Product Manager": {
-      description:
-        "Product managers oversee the development and launch of products. They work at the intersection of business, technology, and user experience to ensure products meet market needs.",
-      dailyTasks: [
-        "Defining product strategy",
-        "Gathering and prioritizing requirements",
-        "Working with cross-functional teams",
-        "Analyzing market trends",
-        "Tracking product performance",
-      ],
-      salaryRange: "£35,000 - £85,000+",
-      growthRate: "10% (Faster than average)",
-      workEnvironment: "Office-based with frequent meetings and collaboration",
-      industries: [
-        "Technology",
-        "Finance",
-        "Healthcare",
-        "Retail",
-        "Manufacturing",
-      ],
-    },
-    "Digital Marketing Specialist": {
-      description:
-        "Digital marketing specialists promote products and services using digital channels. They develop and implement marketing strategies to reach and engage target audiences.",
-      dailyTasks: [
-        "Creating and managing campaigns",
-        "Analyzing marketing data",
-        "Optimizing websites for search engines",
-        "Managing social media accounts",
-        "Creating content for digital channels",
-      ],
-      salaryRange: "£22,000 - £60,000+",
-      growthRate: "10% (Faster than average)",
-      workEnvironment: "Office-based or remote work, often in marketing teams",
-      industries: [
-        "Advertising",
-        "Retail",
-        "Technology",
-        "Media",
-        "Non-profit",
-      ],
-    },
-  };
-
   useEffect(() => {
     // Find the industry data from our data file
     const industry = industrySkills.find((ind) => ind.name === role);
 
-    // Combine with our sample descriptions
-    if (industry && careerDescriptions[role]) {
+    // Combine with our descriptions
+    if (industry) {
       setCareerData({
         ...industry,
-        ...careerDescriptions[role],
+        ...(careerDescriptions[role] || defaultCareerInfo),
       });
     } else {
-      // Fallback for roles not in our sample data
+      // Fallback for roles not in our data
       setCareerData({
         name: role,
         skills: [],
-        description:
-          "Detailed information about this career path is being compiled.",
-        dailyTasks: ["Information coming soon"],
-        salaryRange: "Varies by experience and location",
-        growthRate: "Data being compiled",
-        workEnvironment: "Varies by employer",
-        industries: ["Various industries"],
+        ...(careerDescriptions[role] || defaultCareerInfo),
       });
     }
   }, [role]);
@@ -254,17 +630,40 @@ export default function CareerDetailsPage() {
                         when hiring for this role:
                       </p>
                       <div className="flex flex-wrap gap-2 mt-4">
-                        {careerData.skills.map(
-                          (skill: string, index: number) => (
-                            <Badge
-                              key={index}
-                              className="bg-vibrant-blue text-white dark:bg-vibrant-dark-blue"
-                            >
-                              {skill}
-                            </Badge>
-                          )
-                        )}
+                        {careerData.skills &&
+                          careerData.skills.map(
+                            (skill: string, index: number) => (
+                              <Badge
+                                key={index}
+                                className="bg-vibrant-blue text-white dark:bg-vibrant-dark-blue"
+                              >
+                                {skill}
+                              </Badge>
+                            )
+                          )}
                       </div>
+
+                      {careerData.keyTools && (
+                        <div className="mt-6">
+                          <h3 className="text-lg font-semibold mb-2">
+                            Key Tools and Technologies:
+                          </h3>
+                          <div className="flex flex-wrap gap-2">
+                            {careerData.keyTools.map(
+                              (tool: string, index: number) => (
+                                <Badge
+                                  key={index}
+                                  variant="outline"
+                                  className="border-vibrant-blue text-vibrant-blue dark:border-vibrant-dark-blue dark:text-vibrant-dark-blue"
+                                >
+                                  {tool}
+                                </Badge>
+                              )
+                            )}
+                          </div>
+                        </div>
+                      )}
+
                       <div className="mt-6">
                         <h3 className="text-lg font-semibold mb-2">
                           How to develop these skills:
@@ -284,6 +683,13 @@ export default function CareerDetailsPage() {
                           <li>
                             Find a mentor in the field who can guide your
                             development
+                          </li>
+                          <li>
+                            Contribute to open-source projects or community
+                            initiatives
+                          </li>
+                          <li>
+                            Practice with real-world problems and case studies
                           </li>
                         </ul>
                       </div>
@@ -309,11 +715,12 @@ export default function CareerDetailsPage() {
                         {careerData.name}:
                       </p>
                       <ul className="list-disc pl-5 space-y-2">
-                        {careerData.dailyTasks.map(
-                          (task: string, index: number) => (
-                            <li key={index}>{task}</li>
-                          )
-                        )}
+                        {careerData.dailyTasks &&
+                          careerData.dailyTasks.map(
+                            (task: string, index: number) => (
+                              <li key={index}>{task}</li>
+                            )
+                          )}
                       </ul>
                       <div className="mt-6">
                         <h3 className="text-lg font-semibold mb-2">
@@ -326,17 +733,18 @@ export default function CareerDetailsPage() {
                           Industries:
                         </h3>
                         <div className="flex flex-wrap gap-2">
-                          {careerData.industries.map(
-                            (industry: string, index: number) => (
-                              <Badge
-                                key={index}
-                                variant="outline"
-                                className="border-vibrant-purple text-vibrant-purple dark:border-vibrant-dark-purple dark:text-vibrant-dark-purple"
-                              >
-                                {industry}
-                              </Badge>
-                            )
-                          )}
+                          {careerData.industries &&
+                            careerData.industries.map(
+                              (industry: string, index: number) => (
+                                <Badge
+                                  key={index}
+                                  variant="outline"
+                                  className="border-vibrant-purple text-vibrant-purple dark:border-vibrant-dark-purple dark:text-vibrant-dark-purple"
+                                >
+                                  {industry}
+                                </Badge>
+                              )
+                            )}
                         </div>
                       </div>
                     </div>
@@ -400,6 +808,45 @@ export default function CareerDetailsPage() {
                             Management roles may require additional business or
                             management education
                           </li>
+                          <li>
+                            Specialized roles may develop with expertise in
+                            specific technologies or domains
+                          </li>
+                          <li>
+                            Consulting opportunities often emerge for
+                            professionals with extensive experience
+                          </li>
+                        </ul>
+                      </div>
+
+                      <div className="mt-6">
+                        <h3 className="text-lg font-semibold mb-2">
+                          Future Trends:
+                        </h3>
+                        <p className="mb-2">
+                          The field of {careerData.name.toLowerCase()} is
+                          evolving with these emerging trends:
+                        </p>
+                        <ul className="list-disc pl-5 space-y-2">
+                          <li>
+                            Increasing integration with artificial intelligence
+                            and machine learning
+                          </li>
+                          <li>
+                            Growing emphasis on cybersecurity and data privacy
+                          </li>
+                          <li>
+                            Rising demand for remote and flexible working
+                            arrangements
+                          </li>
+                          <li>
+                            Greater focus on sustainability and environmental
+                            impact
+                          </li>
+                          <li>
+                            Continued adoption of cloud-based and distributed
+                            systems
+                          </li>
                         </ul>
                       </div>
                     </div>
@@ -428,6 +875,31 @@ export default function CareerDetailsPage() {
                             <li>BSc in Computer Science</li>
                             <li>BSc in Software Engineering</li>
                             <li>BSc in Information Technology</li>
+                            <li>BSc in Web Development</li>
+                          </>
+                        )}
+                        {role === "Frontend Developer" && (
+                          <>
+                            <li>BSc in Computer Science</li>
+                            <li>BSc in Web Development</li>
+                            <li>BSc in Interactive Media</li>
+                            <li>BA in Digital Design</li>
+                          </>
+                        )}
+                        {role === "Full Stack Developer" && (
+                          <>
+                            <li>BSc in Computer Science</li>
+                            <li>BSc in Software Engineering</li>
+                            <li>BSc in Web Development</li>
+                            <li>MSc in Computer Science</li>
+                          </>
+                        )}
+                        {role === "Mobile Developer" && (
+                          <>
+                            <li>BSc in Computer Science</li>
+                            <li>BSc in Mobile Application Development</li>
+                            <li>BSc in Software Engineering</li>
+                            <li>BSc in Computer Engineering</li>
                           </>
                         )}
                         {role === "Data Scientist" && (
@@ -436,6 +908,7 @@ export default function CareerDetailsPage() {
                             <li>BSc in Statistics</li>
                             <li>BSc in Mathematics</li>
                             <li>MSc in Data Science or Analytics</li>
+                            <li>MSc in Machine Learning</li>
                           </>
                         )}
                         {role === "UX Designer" && (
@@ -443,6 +916,7 @@ export default function CareerDetailsPage() {
                             <li>BA/BSc in User Experience Design</li>
                             <li>BA in Graphic Design</li>
                             <li>BSc in Human-Computer Interaction</li>
+                            <li>BSc in Psychology with HCI focus</li>
                           </>
                         )}
                         {role === "Product Manager" && (
@@ -450,6 +924,7 @@ export default function CareerDetailsPage() {
                             <li>BSc in Business Administration</li>
                             <li>BSc in Computer Science</li>
                             <li>MBA with focus on Product Management</li>
+                            <li>BSc in Marketing</li>
                           </>
                         )}
                         {role === "Digital Marketing Specialist" && (
@@ -457,14 +932,112 @@ export default function CareerDetailsPage() {
                             <li>BA/BSc in Marketing</li>
                             <li>BSc in Digital Media</li>
                             <li>BSc in Communications</li>
+                            <li>BSc in Business with Marketing</li>
+                          </>
+                        )}
+                        {role === "Cybersecurity Analyst" && (
+                          <>
+                            <li>BSc in Cybersecurity</li>
+                            <li>BSc in Computer Science</li>
+                            <li>BSc in Information Technology</li>
+                            <li>MSc in Cybersecurity</li>
+                          </>
+                        )}
+                        {role === "Business Analyst" && (
+                          <>
+                            <li>BSc in Business Administration</li>
+                            <li>BSc in Information Systems</li>
+                            <li>BSc in Economics</li>
+                            <li>BSc in Finance with IT focus</li>
+                          </>
+                        )}
+                        {role === "IT Project Manager" && (
+                          <>
+                            <li>BSc in Computer Science</li>
+                            <li>BSc in Information Technology</li>
+                            <li>BSc in Business Administration</li>
+                            <li>MSc in Project Management</li>
+                            <li>MSc in IT Management</li>
+                          </>
+                        )}
+                        {role === "AI Research Scientist" && (
+                          <>
+                            <li>BSc in Computer Science</li>
+                            <li>MSc in Artificial Intelligence</li>
+                            <li>PhD in Computer Science or related field</li>
+                            <li>MSc in Machine Learning</li>
+                          </>
+                        )}
+                        {role === "Cloud Engineer" && (
+                          <>
+                            <li>BSc in Computer Science</li>
+                            <li>BSc in Cloud Computing</li>
+                            <li>BSc in Information Technology</li>
+                            <li>MSc in Cloud Architecture</li>
+                          </>
+                        )}
+                        {role === "Network Engineer" && (
+                          <>
+                            <li>BSc in Computer Science</li>
+                            <li>BSc in Network Engineering</li>
+                            <li>BSc in Information Technology</li>
+                            <li>BSc in Telecommunications</li>
+                          </>
+                        )}
+                        {role === "Mechanical Engineer" && (
+                          <>
+                            <li>BEng/MEng in Mechanical Engineering</li>
+                            <li>BSc in Engineering</li>
+                            <li>MSc in Mechanical Engineering</li>
+                            <li>BSc in Manufacturing Engineering</li>
+                          </>
+                        )}
+                        {role === "Electrical Engineer" && (
+                          <>
+                            <li>BEng/MEng in Electrical Engineering</li>
+                            <li>BSc in Electronic Engineering</li>
+                            <li>
+                              BSc in Electrical and Electronic Engineering
+                            </li>
+                            <li>MSc in Power Systems</li>
+                          </>
+                        )}
+                        {role === "Civil Engineer" && (
+                          <>
+                            <li>BEng/MEng in Civil Engineering</li>
+                            <li>BSc in Construction Engineering</li>
+                            <li>BSc in Structural Engineering</li>
+                            <li>MSc in Civil Engineering</li>
+                          </>
+                        )}
+                        {role === "Financial Analyst" && (
+                          <>
+                            <li>BSc in Finance</li>
+                            <li>BSc in Economics</li>
+                            <li>BSc in Accounting</li>
+                            <li>MBA with Finance specialization</li>
+                            <li>MSc in Financial Analysis</li>
                           </>
                         )}
                         {![
                           "Software Developer",
+                          "Frontend Developer",
+                          "Full Stack Developer",
+                          "Mobile Developer",
                           "Data Scientist",
                           "UX Designer",
                           "Product Manager",
                           "Digital Marketing Specialist",
+                          "Cybersecurity Analyst",
+                          "Business Analyst",
+                          "IT Project Manager",
+                          "AI Research Scientist",
+                          "Cloud Engineer",
+                          "Network Engineer",
+                          "Mechanical Engineer",
+                          "Electrical Engineer",
+                          "Civil Engineer",
+                          "Financial Analyst",
                         ].includes(role) && (
                           <li>Relevant bachelor's degree in the field</li>
                         )}
@@ -483,6 +1056,40 @@ export default function CareerDetailsPage() {
                             <li>
                               Oracle Certified Professional, Java SE Programmer
                             </li>
+                            <li>
+                              Certified Kubernetes Application Developer (CKAD)
+                            </li>
+                          </>
+                        )}
+                        {role === "Frontend Developer" && (
+                          <>
+                            <li>
+                              Meta Front-End Developer Professional Certificate
+                            </li>
+                            <li>
+                              JavaScript Certification (various providers)
+                            </li>
+                            <li>React Developer Certification</li>
+                            <li>Google UX Design Professional Certificate</li>
+                          </>
+                        )}
+                        {role === "Full Stack Developer" && (
+                          <>
+                            <li>AWS Certified Developer</li>
+                            <li>MongoDB Certified Developer</li>
+                            <li>Node.js Certification</li>
+                            <li>
+                              Full Stack Web Developer Certification (various
+                              providers)
+                            </li>
+                          </>
+                        )}
+                        {role === "Mobile Developer" && (
+                          <>
+                            <li>Apple iOS Developer Certification</li>
+                            <li>Google Associate Android Developer</li>
+                            <li>React Native Certification</li>
+                            <li>Flutter Developer Certification</li>
                           </>
                         )}
                         {role === "Data Scientist" && (
@@ -495,6 +1102,9 @@ export default function CareerDetailsPage() {
                             <li>
                               Google Data Analytics Professional Certificate
                             </li>
+                            <li>
+                              Certified Data Scientist (various providers)
+                            </li>
                           </>
                         )}
                         {role === "UX Designer" && (
@@ -504,6 +1114,7 @@ export default function CareerDetailsPage() {
                               Certified User Experience Professional (CUXP)
                             </li>
                             <li>Google UX Design Professional Certificate</li>
+                            <li>Interaction Design Foundation Certification</li>
                           </>
                         )}
                         {role === "Product Manager" && (
@@ -511,6 +1122,7 @@ export default function CareerDetailsPage() {
                             <li>Certified Scrum Product Owner (CSPO)</li>
                             <li>Product Management Certificate (PMC)</li>
                             <li>Professional Certified Marketer (PCM)</li>
+                            <li>Agile Certified Product Manager</li>
                           </>
                         )}
                         {role === "Digital Marketing Specialist" && (
@@ -518,18 +1130,175 @@ export default function CareerDetailsPage() {
                             <li>Google Analytics Certification</li>
                             <li>HubSpot Content Marketing Certification</li>
                             <li>Facebook Blueprint Certification</li>
+                            <li>Google Ads Certification</li>
+                          </>
+                        )}
+                        {role === "Cybersecurity Analyst" && (
+                          <>
+                            <li>
+                              Certified Information Systems Security
+                              Professional (CISSP)
+                            </li>
+                            <li>Certified Ethical Hacker (CEH)</li>
+                            <li>CompTIA Security+</li>
+                            <li>
+                              Certified Information Security Manager (CISM)
+                            </li>
+                          </>
+                        )}
+                        {role === "Business Analyst" && (
+                          <>
+                            <li>
+                              Certified Business Analysis Professional (CBAP)
+                            </li>
+                            <li>
+                              PMI Professional in Business Analysis (PMI-PBA)
+                            </li>
+                            <li>
+                              IIBA Entry Certificate in Business Analysis (ECBA)
+                            </li>
+                            <li>Certified Analytics Professional (CAP)</li>
+                          </>
+                        )}
+                        {role === "IT Project Manager" && (
+                          <>
+                            <li>Project Management Professional (PMP)</li>
+                            <li>PRINCE2 Certification</li>
+                            <li>Certified ScrumMaster (CSM)</li>
+                            <li>CompTIA Project+</li>
+                          </>
+                        )}
+                        {role === "AI Research Scientist" && (
+                          <>
+                            <li>TensorFlow Developer Certificate</li>
+                            <li>Deep Learning Specialization (Coursera)</li>
+                            <li>
+                              NVIDIA Deep Learning Institute Certification
+                            </li>
+                            <li>IBM AI Engineering Professional Certificate</li>
+                          </>
+                        )}
+                        {role === "Cloud Engineer" && (
+                          <>
+                            <li>AWS Certified Solutions Architect</li>
+                            <li>Microsoft Azure Administrator</li>
+                            <li>Google Cloud Professional Cloud Architect</li>
+                            <li>Certified Kubernetes Administrator (CKA)</li>
+                          </>
+                        )}
+                        {role === "Network Engineer" && (
+                          <>
+                            <li>Cisco Certified Network Professional (CCNP)</li>
+                            <li>CompTIA Network+</li>
+                            <li>Juniper Networks Certification (JNCIA)</li>
+                            <li>Certified Network Security Engineer (CNSE)</li>
+                          </>
+                        )}
+                        {role === "Mechanical Engineer" && (
+                          <>
+                            <li>Professional Engineer (PE) license</li>
+                            <li>Certified SolidWorks Professional (CSWP)</li>
+                            <li>ASME Certification</li>
+                            <li>Certified Manufacturing Engineer (CMfgE)</li>
+                          </>
+                        )}
+                        {role === "Electrical Engineer" && (
+                          <>
+                            <li>Professional Engineer (PE) license</li>
+                            <li>
+                              Certified Electrical Safety Compliance
+                              Professional (CESCP)
+                            </li>
+                            <li>IEEE Certification</li>
+                            <li>Certified Power Quality Professional (CPQ)</li>
+                          </>
+                        )}
+                        {role === "Civil Engineer" && (
+                          <>
+                            <li>Professional Engineer (PE) license</li>
+                            <li>
+                              Leadership in Energy and Environmental Design
+                              (LEED)
+                            </li>
+                            <li>
+                              Structural Engineering Certification Board (SECB)
+                              certification
+                            </li>
+                            <li>Project Management Professional (PMP)</li>
+                          </>
+                        )}
+                        {role === "Financial Analyst" && (
+                          <>
+                            <li>Chartered Financial Analyst (CFA)</li>
+                            <li>Financial Risk Manager (FRM)</li>
+                            <li>Certified Financial Planner (CFP)</li>
+                            <li>
+                              Chartered Alternative Investment Analyst (CAIA)
+                            </li>
                           </>
                         )}
                         {![
                           "Software Developer",
+                          "Frontend Developer",
+                          "Full Stack Developer",
+                          "Mobile Developer",
                           "Data Scientist",
                           "UX Designer",
                           "Product Manager",
                           "Digital Marketing Specialist",
+                          "Cybersecurity Analyst",
+                          "Business Analyst",
+                          "IT Project Manager",
+                          "AI Research Scientist",
+                          "Cloud Engineer",
+                          "Network Engineer",
+                          "Mechanical Engineer",
+                          "Electrical Engineer",
+                          "Civil Engineer",
+                          "Financial Analyst",
                         ].includes(role) && (
                           <li>Industry-specific certifications</li>
                         )}
                       </ul>
+
+                      <div className="mt-6">
+                        <h3 className="text-lg font-semibold">
+                          Recommended Courses at Lancaster University
+                        </h3>
+                        <div className="mt-2 space-y-3">
+                          <Card className="bg-card">
+                            <CardContent className="p-4">
+                              <div className="flex items-center gap-2">
+                                <BookOpen className="h-4 w-4 text-vibrant-blue dark:text-vibrant-dark-blue" />
+                                <h4 className="font-medium">
+                                  Relevant Undergraduate Modules
+                                </h4>
+                              </div>
+                              <p className="mt-2 text-sm">
+                                Contact your academic advisor to learn about
+                                specific modules that can help you develop the
+                                skills needed for this career path.
+                              </p>
+                            </CardContent>
+                          </Card>
+
+                          <Card className="bg-card">
+                            <CardContent className="p-4">
+                              <div className="flex items-center gap-2">
+                                <BookOpen className="h-4 w-4 text-vibrant-purple dark:text-vibrant-dark-purple" />
+                                <h4 className="font-medium">
+                                  Professional Development Workshops
+                                </h4>
+                              </div>
+                              <p className="mt-2 text-sm">
+                                Lancaster University offers various workshops
+                                and short courses to help you develop
+                                professional skills relevant to this career.
+                              </p>
+                            </CardContent>
+                          </Card>
+                        </div>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>

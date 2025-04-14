@@ -155,7 +155,7 @@ export default function Home() {
                   <Image
                     alt="Career Path Illustration"
                     className="aspect-video overflow-hidden rounded-xl object-cover object-center"
-                    src="/placeholder.svg"
+                    src="/placeholder.png"
                     width={600}
                     height={400}
                     priority

@@ -81,7 +81,7 @@
 }
 
 .dark .bg-gradient-vibrant {
-  @apply bg-gradient-to-r from-[#60a5fa] to-[#a855f7];
+  @apply bg-gradient-to-r from-vibrant-dark-blue to-vibrant-dark-purple;
 }
 
 /* Light mode gradients */
@@ -99,15 +99,43 @@
 
 /* Dark mode gradients */
 .dark .gradient-blue-purple {
-  @apply bg-gradient-to-r from-[#60a5fa] to-[#a855f7] text-white;
+  @apply bg-gradient-to-r from-vibrant-dark-blue to-vibrant-dark-purple text-white;
 }
 
 .dark .gradient-purple-pink {
-  @apply bg-gradient-to-r from-[#a855f7] to-[#f472b6] text-white;
+  @apply bg-gradient-to-r from-vibrant-dark-purple to-vibrant-dark-pink text-white;
 }
 
 .dark .gradient-blue-teal {
-  @apply bg-gradient-to-r from-[#60a5fa] to-vibrant-teal text-white;
+  @apply bg-gradient-to-r from-vibrant-dark-blue to-vibrant-teal text-white;
+}
+
+/* Static gradient button - no flickering */
+.static-gradient-button {
+  background: linear-gradient(to right, #2563eb, #7e22ce);
+  border-radius: 0.375rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.dark .static-gradient-button {
+  background: linear-gradient(to right, #60a5fa, #a855f7);
+}
+
+.static-gradient-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.static-gradient-button:hover::before {
+  opacity: 1;
 }
 
 /* Card hover effects */
@@ -135,7 +163,7 @@
 }
 
 .dark .gradient-text {
-  @apply bg-clip-text text-transparent bg-gradient-to-r from-[#60a5fa] to-[#a855f7];
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-vibrant-dark-blue to-vibrant-dark-purple;
 }
 
 /* Improved button styles for better visibility */
@@ -181,4 +209,43 @@
 /* Learn more button with better contrast */
 .learn-more-btn {
   @apply border-2 border-white text-white hover:bg-white/20 dark:border-white dark:text-white dark:hover:bg-white/20;
+}
+
+/* Fixed height cards for recommendations */
+.recommendation-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.recommendation-card .card-content {
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+/* Ensure badges wrap properly and don't overflow */
+.badge-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  max-height: 5rem;
+  overflow-y: auto;
+}
+
+/* Truncate long text in cards */
+.truncate-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Equal height grid items */
+.equal-height-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.equal-height-grid > * {
+  height: 100%;
 }
