@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { CheckCircle, XCircle, BookOpen } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState } from "react";
+import Link from "next/link";
 
 interface SkillGapCardProps {
   recommendation: {
@@ -73,7 +74,7 @@ export function SkillGapCard({ recommendation }: SkillGapCardProps) {
                 className="h-2 bg-gray-200 dark:bg-gray-700"
               >
                 <div
-                  className="h-full bg-gradient-to-r from-vibrant-blue to-vibrant-purple dark:from-[#60a5fa] dark:to-[#a855f7] rounded-full"
+                  className="h-full bg-gradient-to-r from-vibrant-blue to-vibrant-purple dark:from-vibrant-dark-blue dark:to-vibrant-dark-purple rounded-full"
                   style={{ width: `${recommendation.matchPercentage}%` }}
                 />
               </Progress>
@@ -125,7 +126,7 @@ export function SkillGapCard({ recommendation }: SkillGapCardProps) {
           {recommendation.recommendedCourses.length > 0 && (
             <div className="space-y-2">
               <h3 className="flex items-center gap-2 font-medium">
-                <BookOpen className="h-4 w-4 text-vibrant-blue dark:text-[#60a5fa]" />
+                <BookOpen className="h-4 w-4 text-vibrant-blue dark:text-vibrant-dark-blue" />
                 Recommended Courses
               </h3>
               <ul className="space-y-1">
@@ -137,7 +138,7 @@ export function SkillGapCard({ recommendation }: SkillGapCardProps) {
                     transition={{ duration: 0.3, delay: 0.2 + 0.1 * index }}
                     className="text-sm"
                   >
-                    <span className="font-medium text-vibrant-blue dark:text-[#60a5fa]">
+                    <span className="font-medium text-vibrant-blue dark:text-vibrant-dark-blue">
                       {course.code}
                     </span>
                     : {course.name}
@@ -148,12 +149,17 @@ export function SkillGapCard({ recommendation }: SkillGapCardProps) {
           )}
         </CardContent>
         <CardFooter className="relative">
-          <Button
-            variant="outline"
-            className="w-full gradient-blue-purple hover:opacity-90 border-0"
+          <Link
+            href={`/career-details/${encodeURIComponent(recommendation.role)}`}
+            className="w-full"
           >
-            View Career Details
-          </Button>
+            <Button
+              variant="outline"
+              className="w-full gradient-blue-purple hover:opacity-90 border-0"
+            >
+              View Career Details
+            </Button>
+          </Link>
         </CardFooter>
       </Card>
     </motion.div>
