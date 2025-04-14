@@ -356,7 +356,7 @@ export default function Dashboard() {
                   <AnimatedElement animation="slide-up" delay={0.2}>
                     <JobListings
                       role={recommendations[0].role}
-                      userSkills={skills}
+                      userSkills={skills.length > 0 ? skills : []}
                     />
                   </AnimatedElement>
                 )}

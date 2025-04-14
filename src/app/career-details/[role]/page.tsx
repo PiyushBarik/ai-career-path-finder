@@ -1319,7 +1319,14 @@ export default function CareerDetailsPage() {
 
             <TabsContent value="job-market" className="space-y-6 mt-6">
               <AnimatedElement animation="slide-up" delay={0.3}>
-                <JobListings role={role} userSkills={careerData.skills} />
+                <JobListings
+                  role={role}
+                  userSkills={
+                    careerData.skills && careerData.skills.length > 0
+                      ? careerData.skills
+                      : []
+                  }
+                />
               </AnimatedElement>
             </TabsContent>
           </Tabs>

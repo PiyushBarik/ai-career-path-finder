@@ -67,15 +67,24 @@ export function JobListings({ role, userSkills = [] }: JobListingsProps) {
 
   // Calculate skill match percentage for each job
   const getSkillMatchPercentage = (jobSkills: string[]) => {
-    if (!userSkills.length || !jobSkills.length) return 0;
+    if (!userSkills || !userSkills.length || !jobSkills || !jobSkills.length)
+      return 0;
 
-    const matchingSkills = jobSkills.filter((skill) =>
-      userSkills.some(
-        (userSkill) => userSkill.toLowerCase() === skill.toLowerCase()
-      )
+    // Normalize all skills to lowercase for better comparison
+    const normalizedUserSkills = userSkills.map((skill) =>
+      skill.toLowerCase().trim()
+    );
+    const normalizedJobSkills = jobSkills.map((skill) =>
+      skill.toLowerCase().trim()
     );
 
-    return Math.round((matchingSkills.length / jobSkills.length) * 100);
+    const matchingSkills = normalizedJobSkills.filter((jobSkill) =>
+      normalizedUserSkills.some((userSkill) => userSkill === jobSkill)
+    );
+
+    return Math.round(
+      (matchingSkills.length / normalizedJobSkills.length) * 100
+    );
   };
 
   if (loading) {
@@ -243,11 +252,15 @@ export function JobListings({ role, userSkills = [] }: JobListingsProps) {
                             </p>
                             <div className="flex flex-wrap gap-1">
                               {job.skills.map((skill: string, i: number) => {
-                                const isMatch = userSkills.some(
-                                  (userSkill) =>
-                                    userSkill.toLowerCase() ===
-                                    skill.toLowerCase()
-                                );
+                                // Improved matching logic with null check
+                                const isMatch =
+                                  userSkills &&
+                                  userSkills.length > 0 &&
+                                  userSkills.some(
+                                    (userSkill) =>
+                                      userSkill.toLowerCase().trim() ===
+                                      skill.toLowerCase().trim()
+                                  );
 
                                 return (
                                   <Badge
