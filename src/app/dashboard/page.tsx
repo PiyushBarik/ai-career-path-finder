@@ -253,7 +253,7 @@ export default function Dashboard() {
                         ) : (
                           <>
                             <Upload className="mr-2 h-4 w-4" />
-                            Upload and Analyze
+                            Upload and Analyse
                           </>
                         )}
                       </Button>
@@ -344,7 +344,7 @@ export default function Dashboard() {
                           No Recommendations Yet
                         </CardTitle>
                         <CardDescription>
-                          Add your skills or upload your CV to get personalized
+                          Add your skills or upload your CV to get personalised
                           career recommendations
                         </CardDescription>
                       </CardHeader>
@@ -385,14 +385,14 @@ export default function Dashboard() {
                         </CardTitle>
                         <CardDescription>
                           Add your skills or upload your CV to generate a
-                          personalized career roadmap
+                          personalised career roadmap
                         </CardDescription>
                       </CardHeader>
                       <CardContent className="flex flex-col items-center justify-center py-6 text-center">
                         <Route className="h-16 w-16 text-muted-foreground mb-4" />
                         <p className="text-muted-foreground mb-6 max-w-md">
-                          Our AI will analyze your skills and experience to
-                          create a personalized career development plan.
+                          Our AI will analyse your skills and experience to
+                          create a personalised career development plan.
                         </p>
                         <Button
                           onClick={() => setActiveTab("profile")}
@@ -429,7 +429,7 @@ export default function Dashboard() {
                     <Card className="overflow-hidden border-2 border-dashed border-muted">
                       <CardHeader>
                         <CardTitle className="gradient-text">
-                          Get Personalized Job Listings
+                          Get Personalised Job Listings
                         </CardTitle>
                         <CardDescription>
                           Complete your profile to see job listings tailored to

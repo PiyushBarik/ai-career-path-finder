@@ -447,7 +447,7 @@ export function CareerRoadmap({
           Career Development Roadmap
         </CardTitle>
         <CardDescription>
-          Get a personalized career roadmap based on your skills and experience
+          Get a personalised career roadmap based on your skills and experience
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -458,8 +458,8 @@ export function CareerRoadmap({
               Generate Your Career Roadmap
             </h3>
             <p className="text-muted-foreground mb-6 max-w-md">
-              Our AI will analyze your skills and experience to create a
-              personalized career development plan.
+              Our AI will analyse your skills and experience to create a
+              personalised career development plan.
             </p>
             {error && (
               <div className="text-red-500 dark:text-red-400 mb-4">{error}</div>
@@ -478,7 +478,7 @@ export function CareerRoadmap({
           <div className="flex flex-col items-center justify-center py-12">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-vibrant-blue dark:border-vibrant-dark-blue mb-4"></div>
             <p className="text-muted-foreground">
-              Generating your personalized roadmap...
+              Generating your personalised roadmap...
             </p>
           </div>
         )}

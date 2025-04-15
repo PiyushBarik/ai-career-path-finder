@@ -91,7 +91,7 @@ export default function LearnMore() {
                         University students navigate the complex landscape of
                         career choices. Our mission is to bridge the gap between
                         academic learning and industry requirements, providing
-                        personalized guidance to help students make informed
+                        personalised guidance to help students make informed
                         decisions about their career paths.
                       </p>
                       <div className="grid md:grid-cols-2 gap-6 mt-6">
@@ -145,9 +145,9 @@ export default function LearnMore() {
                         would help bridge this gap.
                       </p>
                       <p className="text-foreground">
-                        Our platform uses artificial intelligence to analyze
+                        Our platform uses artificial intelligence to analyse
                         your skills, courses, and CV, and match them with
-                        industry requirements. We provide personalized
+                        industry requirements. We provide personalised
                         recommendations for career paths, identify skill gaps,
                         and suggest courses that will help you achieve your
                         career goals.
@@ -186,7 +186,7 @@ export default function LearnMore() {
                         Career Recommendations
                       </h3>
                       <p className="text-muted-foreground">
-                        Receive personalized career path recommendations based
+                        Receive personalised career path recommendations based
                         on your skills, experiences, and interests.
                       </p>
                     </CardContent>
@@ -221,7 +221,7 @@ export default function LearnMore() {
                       <p className="text-foreground">
                         AI Career Path Finder uses cutting-edge artificial
                         intelligence and machine learning technologies to
-                        provide personalized career recommendations. Here's how
+                        provide personalised career recommendations. Here's how
                         our technology works:
                       </p>
                       <ul className="space-y-2 list-disc pl-5 text-foreground">
@@ -229,7 +229,7 @@ export default function LearnMore() {
                           <span className="font-semibold">
                             Natural Language Processing (NLP)
                           </span>
-                          : We use NLP to analyze your CV and extract relevant
+                          : We use NLP to analyse your CV and extract relevant
                           skills and experiences.
                         </li>
                         <li>
@@ -242,7 +242,7 @@ export default function LearnMore() {
                         </li>
                         <li>
                           <span className="font-semibold">Data Analytics</span>:
-                          We analyze industry trends and requirements to provide
+                          We analyse industry trends and requirements to provide
                           up-to-date career recommendations.
                         </li>
                       </ul>

@@ -136,7 +136,7 @@ const careerDescriptions: Record<string, any> = {
   },
   "Data Scientist": {
     description:
-      "Data scientists analyze and interpret complex data to help organizations make better decisions. They use statistical methods, machine learning, and programming to extract insights from data and develop predictive models that solve business problems.",
+      "Data scientists analyse and interpret complex data to help organizations make better decisions. They use statistical methods, machine learning, and programming to extract insights from data and develop predictive models that solve business problems.",
     dailyTasks: [
       "Collecting and cleaning data",
       "Building predictive models",
@@ -234,7 +234,7 @@ const careerDescriptions: Record<string, any> = {
   },
   "Business Analyst": {
     description:
-      "Business analysts bridge the gap between business needs and technology solutions. They analyze processes, identify problems, and recommend improvements to help organizations achieve their goals and operate more efficiently.",
+      "Business analysts bridge the gap between business needs and technology solutions. They analyse processes, identify problems, and recommend improvements to help organizations achieve their goals and operate more efficiently.",
     dailyTasks: [
       "Gathering and documenting requirements",
       "Analyzing business processes",
@@ -462,7 +462,7 @@ const careerDescriptions: Record<string, any> = {
   },
   "Financial Analyst": {
     description:
-      "Financial analysts evaluate investment opportunities and provide guidance on financial decisions. They analyze financial data, market trends, and economic conditions to help organizations and individuals make informed choices about investments and financial strategies.",
+      "Financial analysts evaluate investment opportunities and provide guidance on financial decisions. They analyse financial data, market trends, and economic conditions to help organizations and individuals make informed choices about investments and financial strategies.",
     dailyTasks: [
       "Analyzing financial statements and data",
       "Creating financial models and forecasts",

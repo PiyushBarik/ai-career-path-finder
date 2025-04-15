@@ -108,7 +108,7 @@ export default function Home() {
                     Discover Your Ideal Career Path
                   </h1>
                   <p className="max-w-[600px] text-white/90 md:text-xl">
-                    Our AI-powered platform analyzes your skills, courses, and
+                    Our AI-powered platform analyses your skills, courses, and
                     CV to recommend the best career paths for you.
                   </p>
                 </div>
@@ -199,7 +199,7 @@ export default function Home() {
                       Upload Your CV
                     </h3>
                     <p className="text-muted-foreground">
-                      Our AI analyzes your CV to extract skills and experiences,
+                      Our AI analyses your CV to extract skills and experiences,
                       creating a comprehensive profile of your capabilities.
                     </p>
                   </div>
@@ -216,12 +216,11 @@ export default function Home() {
                       <GraduationCap className="h-6 w-6 text-white" />
                     </div>
                     <h3 className="text-xl font-bold text-foreground mb-2">
-                      Add Your Courses
+                      Add Your Skills
                     </h3>
                     <p className="text-muted-foreground">
-                      Select the university modules you've completed or are
-                      studying to enhance your skill profile and improve
-                      recommendations.
+                      Add the skills that you hace learned from your courses and
+                      your work experience to get depper and better insights.
                     </p>
                   </div>
                 </div>
@@ -240,7 +239,7 @@ export default function Home() {
                       Get Recommendations
                     </h3>
                     <p className="text-muted-foreground">
-                      Receive personalized career path recommendations and skill
+                      Receive personalised career path recommendations and skill
                       gap analysis based on your profile and industry
                       requirements.
                     </p>
