@@ -56,7 +56,7 @@ You must have [Node.js](https://nodejs.org/en) installed on your computer.
    ```
 
 2. **Set up environment variables**;
-   Add the '.env.local' file that is sent to you privately to the root of the project.
+   Create a '.env.local' file that is sent to you privately to the root of the project.
 
    The format of the '.env.local' file should look as below
 
