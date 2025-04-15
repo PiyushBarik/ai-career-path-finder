@@ -2,7 +2,7 @@
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-This repository helps users explore AI career paths and parse CVs using the [Vercel AI SDK](https://sdk.vercel.ai) and OpenAI. It demonstrates how to use server-side routes, tailor responses with GPT-based models, and integrate third-party services like ConvertAPI.
+This repository helps users explore AI career paths and parse CVs using the [Vercel AI SDK](https://sdk.vercel.ai) and OpenAI.
 
 ## Getting Started
 
