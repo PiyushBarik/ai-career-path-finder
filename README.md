@@ -126,8 +126,6 @@ All server-side routes are located in [`src/app/api/`](./src/app/api/):
 - **[shadcn/ui](https://ui.shadcn.com/)**: A modern, accessible component library built on top of Tailwind CSS.
 - **[`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts)**: Automatically optimizes and loads custom fonts (here, [Geist](https://vercel.com/font)) for a polished UI.
 
-This updated section showcases the functional AI-driven features—particularly automated CV analysis—and references the core technologies that make it possible.
-
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
