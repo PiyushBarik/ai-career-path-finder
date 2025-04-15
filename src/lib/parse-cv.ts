@@ -7,7 +7,7 @@ import path from "path";
 import os from "os";
 
 // Instantiate ConvertAPI using the secret key (use your actual secret)
-const convertapiClient = new ConvertAPI("secret_YthJ8UmhbTH2bm0h");
+const convertapiClient = new ConvertAPI(process.env.CONVERTAPI_SECRET || "");
 
 // Fallback OpenAI client for plain-text cases.
 const openaiClient = new OpenAI({
