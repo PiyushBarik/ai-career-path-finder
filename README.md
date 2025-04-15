@@ -65,7 +65,7 @@ You must have [Node.js](https://nodejs.org/en) installed on your computer.
     CONVERTAPI_SECRET=your_convertapi_secret_key
    ```
 
-3. **First, run the development server**:
+3. **Run the development server**:
 
    ```bash
    npm run dev
