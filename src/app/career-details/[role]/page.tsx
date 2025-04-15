@@ -21,6 +21,7 @@ import { useParams } from "next/navigation";
 import { industrySkills } from "@/lib/data";
 import { useState, useEffect } from "react";
 import { JobListings } from "@/components/job-listings";
+import { UserAvatar } from "@/components/user-avatar";
 
 // Career descriptions with detailed information for each role
 const careerDescriptions: Record<string, any> = {
@@ -999,6 +1000,14 @@ export default function CareerDetailsPage() {
                         )}
                         {role === "Mechanical Engineer" && (
                           <>
+                            <li>BSc in Computer Science</li>
+                            <li>BSc in Network Engineering</li>
+                            <li>BSc in Information Technology</li>
+                            <li>BSc in Telecommunications</li>
+                          </>
+                        )}
+                        {role === "Mechanical Engineer" && (
+                          <>
                             <li>BEng/MEng in Mechanical Engineering</li>
                             <li>BSc in Engineering</li>
                             <li>MSc in Mechanical Engineering</li>
@@ -1381,8 +1390,8 @@ export default function CareerDetailsPage() {
                 <div className="grid md:grid-cols-3 gap-4">
                   <Card className="bg-card">
                     <CardContent className="p-4 flex flex-col items-center text-center">
-                      <div className="w-16 h-16 rounded-full bg-gray-200 mb-3"></div>
-                      <h3 className="font-semibold">Sarah Johnson</h3>
+                      <UserAvatar name="Sarah Johnson" size="md" />
+                      <h3 className="font-semibold mt-3">Sarah Johnson</h3>
                       <p className="text-sm text-muted-foreground">
                         Senior {careerData.name} at Tech Corp
                       </p>
@@ -1393,8 +1402,8 @@ export default function CareerDetailsPage() {
                   </Card>
                   <Card className="bg-card">
                     <CardContent className="p-4 flex flex-col items-center text-center">
-                      <div className="w-16 h-16 rounded-full bg-gray-200 mb-3"></div>
-                      <h3 className="font-semibold">Michael Chen</h3>
+                      <UserAvatar name="Michael Chen" size="md" />
+                      <h3 className="font-semibold mt-3">Michael Chen</h3>
                       <p className="text-sm text-muted-foreground">
                         {careerData.name} at Global Solutions
                       </p>
@@ -1405,8 +1414,8 @@ export default function CareerDetailsPage() {
                   </Card>
                   <Card className="bg-card">
                     <CardContent className="p-4 flex flex-col items-center text-center">
-                      <div className="w-16 h-16 rounded-full bg-gray-200 mb-3"></div>
-                      <h3 className="font-semibold">Emma Wilson</h3>
+                      <UserAvatar name="Emma Wilson" size="md" />
+                      <h3 className="font-semibold mt-3">Emma Wilson</h3>
                       <p className="text-sm text-muted-foreground">
                         Lead {careerData.name} at Innovate Inc
                       </p>
