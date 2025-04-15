@@ -79,30 +79,54 @@ You must have [Node.js](https://nodejs.org/en) installed on your computer.
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Key Endpoints
 
-It also incorporates [Tailwind CSS](https://tailwindcss.com/) for efficient utility-based styling and [shadcn/ui](https://ui.shadcn.com/) for a modern, accessible component library.
+All server-side routes are located in [`src/app/api/`](./src/app/api/):
 
-## Project Structure & Usage
+1. **`parse-cv/route.ts`**  
+   Handles file uploads and calls [`parse-cv.ts`](./src/lib/parse-cv.ts) to extract skills.
 
-- **`src/app/api/parse-cv/route.ts`**  
-  The server-side endpoint for handling CV uploads.
+2. **`generate-roadmap/route.ts`**  
+   Generates a recommended learning path or roadmap based on user-selected roles and skill gaps.
 
-- **`src/lib/parse-cv.ts`**  
-  Core logic for parsing PDFs and DOC/DOCX files, using:
-  - **ConvertAPI** to convert DOCX to PDF if needed.
-  - **OpenAI** (via the [Vercel AI SDK](https://sdk.vercel.ai)) to extract relevant skills from each CV.
+3. **`job-market/route.ts`**  
+   Retrieves job listings or labor market information (implementation can be adapted to a real API).
 
-### Parsing CVs
+4. **`recommend/route.ts`**  
+   Provides personalized skill or job recommendations.
 
-1. A user uploads their CV via the UI or a form.
-2. The system checks the file type:
-   - **PDF** → processed directly by GPT.
-   - **DOC/DOCX** → converted to PDF using ConvertAPI, then processed by GPT.
-   - **Other** → handled as plain text via OpenAI’s API.
-3. The server responds with a comma-separated list of identified professional skills.
+---
 
-This showcases a functional AI-driven feature for automated CV analysis—useful for career services, recruitment platforms, or skill-matching applications.
+## How CV Parsing Works
+
+1. **Upload**  
+   The user submits their CV via a form or UI component.
+
+2. **File Type Check**
+
+   - **PDF** → Processed directly by GPT ([OpenAI](https://platform.openai.com/)).
+   - **DOC/DOCX** → Converted to PDF using [ConvertAPI](https://www.convertapi.com/), then processed by GPT.
+   - **Other Formats** → Treated as plain text by OpenAI’s API.
+
+3. **Skill Extraction**  
+   The system uses an LLM (OpenAI) to identify relevant professional skills from the CV text.
+
+4. **Response**  
+   A comma-separated list of recognized skills is returned to the client.
+
+---
+
+## Technologies Used
+
+- **[Next.js](https://nextjs.org)**: A React framework for building server-rendered and statically generated applications.
+- **TypeScript**: Typed JavaScript for more robust and maintainable code.
+- **OpenAI / [Vercel AI SDK](https://sdk.vercel.ai)**: Integrates GPT-based language models for text analysis and skill extraction.
+- **[ConvertAPI](https://www.convertapi.com/)**: Converts DOC/DOCX files to PDF for uniform text extraction.
+- **[Tailwind CSS](https://tailwindcss.com/)**: A utility-first CSS framework for rapid UI development.
+- **[shadcn/ui](https://ui.shadcn.com/)**: A modern, accessible component library built on top of Tailwind CSS.
+- **[`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts)**: Automatically optimizes and loads custom fonts (here, [Geist](https://vercel.com/font)) for a polished UI.
+
+This updated section showcases the functional AI-driven features—particularly automated CV analysis—and references the core technologies that make it possible.
 
 ## Learn More
 
