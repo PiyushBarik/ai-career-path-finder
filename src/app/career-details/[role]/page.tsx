@@ -1000,14 +1000,6 @@ export default function CareerDetailsPage() {
                         )}
                         {role === "Mechanical Engineer" && (
                           <>
-                            <li>BSc in Computer Science</li>
-                            <li>BSc in Network Engineering</li>
-                            <li>BSc in Information Technology</li>
-                            <li>BSc in Telecommunications</li>
-                          </>
-                        )}
-                        {role === "Mechanical Engineer" && (
-                          <>
                             <li>BEng/MEng in Mechanical Engineering</li>
                             <li>BSc in Engineering</li>
                             <li>MSc in Mechanical Engineering</li>
