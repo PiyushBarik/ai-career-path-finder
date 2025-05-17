@@ -9,16 +9,7 @@ interface Course {
   skills: string[];
 }
 
-interface Recommendation {
-  role: string;
-  matchPercentage: number;
-  existingSkills: string[];
-  missingSkills: string[];
-  recommendedCourses: {
-    code: string;
-    name: string;
-  }[];
-}
+import { Recommendation } from "@/types/recommendation";
 
 // Dictionary mapping various variants to a common normalized skill.
 const SKILL_SYNONYMS: Record<string, string> = {
