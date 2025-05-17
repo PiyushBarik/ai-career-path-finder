@@ -13,18 +13,10 @@ import { Badge } from "@/components/ui/badge";
 import { CheckCircle, XCircle, BookOpen } from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
+import { Recommendation } from "@/types/recommendation";
 
 interface SkillGapCardProps {
-  recommendation: {
-    role: string;
-    matchPercentage: number;
-    existingSkills: string[];
-    missingSkills: string[];
-    recommendedCourses: {
-      code: string;
-      name: string;
-    }[];
-  };
+  recommendation: Recommendation;
 }
 
 export function SkillGapCard({ recommendation }: SkillGapCardProps) {

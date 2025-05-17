@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { industrySkills, courses } from "@/lib/data";
 import { getRecommendations } from "@/lib/recommendation-model";
+import { Recommendation } from "@/types/recommendation";
 
 export async function POST(request: NextRequest) {
   try {
@@ -13,7 +14,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const recommendations = getRecommendations(skills, industrySkills, courses);
+    const recommendations: Recommendation[] = getRecommendations(
+      skills,
+      industrySkills,
+      courses
+    );
 
     return NextResponse.json({ recommendations });
   } catch (error) {

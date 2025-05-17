@@ -3,6 +3,7 @@
 import type React from "react";
 
 import { useState } from "react";
+import { Recommendation } from "@/types/recommendation";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -35,7 +36,7 @@ export default function Dashboard() {
   const [file, setFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [skills, setSkills] = useState<string[]>([]);
-  const [recommendations, setRecommendations] = useState<any[]>([]);
+  const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
   const [activeTab, setActiveTab] = useState("profile");
   const [error, setError] = useState<string | null>(null);
   const [cvText, setCvText] = useState<string | null>(null);
