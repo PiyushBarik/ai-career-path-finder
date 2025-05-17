@@ -71,35 +71,35 @@ export async function parseCV(formData: FormData): Promise<string[]> {
       const tempOutputDir = path.join(os.tmpdir(), `convert_${Date.now()}`);
       await fs.mkdir(tempOutputDir, { recursive: true });
 
-      // Convert DOCX to PDF using ConvertAPI.
-      const conversionResult = await convertapiClient.convert(
-        "pdf",
-        { File: tempInputPath },
-        "docx"
-      );
+      try {
+        // Convert DOCX to PDF using ConvertAPI.
+        const conversionResult = await convertapiClient.convert(
+          "pdf",
+          { File: tempInputPath },
+          "docx"
+        );
 
-      // Save the converted file(s) into the temporary output directory.
-      await conversionResult.saveFiles(tempOutputDir);
+        // Save the converted file(s) into the temporary output directory.
+        await conversionResult.saveFiles(tempOutputDir);
 
-      // Expect one file (the PDF); read it.
-      const outputFiles = await fs.readdir(tempOutputDir);
-      if (outputFiles.length === 0) {
-        throw new Error("No output files found after conversion.");
-      }
-      const pdfFilePath = path.join(tempOutputDir, outputFiles[0]);
-      const pdfBuffer = await fs.readFile(pdfFilePath);
+        // Expect one file (the PDF); read it.
+        const outputFiles = await fs.readdir(tempOutputDir);
+        if (outputFiles.length === 0) {
+          throw new Error("No output files found after conversion.");
+        }
+        const pdfFilePath = path.join(tempOutputDir, outputFiles[0]);
+        const pdfBuffer = await fs.readFile(pdfFilePath);
 
-      // Clean up temporary files (optional).
-      await fs.unlink(tempInputPath);
-      // Optionally remove tempOutputDir. You might use fs.rm(tempOutputDir, { recursive: true }).
+        // Clean up temporary files.
+        await fs.unlink(tempInputPath);
 
-      // Now send the generated PDF Buffer to the Vercel AI SDK.
-      const resultText = await generateText({
-        model: openai("gpt-4o"),
-        messages: [
-          {
-            role: "user",
-            content: [
+        // Now send the generated PDF Buffer to the Vercel AI SDK.
+        const resultText = await generateText({
+          model: openai("gpt-4o"),
+          messages: [
+            {
+              role: "user",
+              content: [
               {
                 type: "text",
                 text: "Extract all professional skills from the attached CV. Return only a comma-separated list of skills with no additional commentary.",
@@ -113,13 +113,16 @@ export async function parseCV(formData: FormData): Promise<string[]> {
             ],
           },
         ],
-      });
+        });
 
-      const extractedSkillsRaw = resultText.text || "";
-      return extractedSkillsRaw
-        .split(",")
-        .map((skill) => skill.trim())
-        .filter((skill) => skill.length > 0);
+        const extractedSkillsRaw = resultText.text || "";
+        return extractedSkillsRaw
+          .split(",")
+          .map((skill) => skill.trim())
+          .filter((skill) => skill.length > 0);
+      } finally {
+        await fs.rm(tempOutputDir, { recursive: true, force: true });
+      }
     }
     // CASE 3: Other file types – fallback to using plain text extraction.
     else {
