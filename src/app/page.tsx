@@ -219,8 +219,8 @@ export default function Home() {
                       Add Your Skills
                     </h3>
                     <p className="text-muted-foreground">
-                      Add the skills that you hace learned from your courses and
-                      your work experience to get depper and better insights.
+                      Add the skills that you have learned from your courses and
+                      your work experience to get deeper and better insights.
                     </p>
                   </div>
                 </div>
