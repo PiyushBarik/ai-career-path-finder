@@ -41,9 +41,9 @@ You must have [Node.js](https://nodejs.org/en) installed on your computer.
    brew install node
    ```
 
-## Staring Server
+## Starting Server
 
-1. **Install dependencies. You must have Node.js **:
+1. **Install dependencies (Node.js required):**
 
    ```bash
    npm install
